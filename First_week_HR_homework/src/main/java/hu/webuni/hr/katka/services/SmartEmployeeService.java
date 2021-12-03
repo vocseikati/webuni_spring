@@ -28,7 +28,7 @@ public class SmartEmployeeService implements EmployeeService {
     if (period.getYears() >= config.getSmart().getLimit2()) {
       return config.getSmart().getPercent2();
     }
-    if (period.getYears() >= config.getSmart().getLimit3() && period.getMonths() >= 6) {
+    if (period.getYears() >= config.getSmart().getLimit3()) {
       return config.getSmart().getPercent3();
     }
     return 0;

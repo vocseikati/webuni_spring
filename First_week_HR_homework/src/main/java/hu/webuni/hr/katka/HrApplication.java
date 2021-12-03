@@ -30,7 +30,7 @@ public class HrApplication implements CommandLineRunner {
         LocalDateTime.of(2016, 9, 1, 8, 0, 0));
 
     Employee testEmployee3 = new Employee(3L, "Zöldfülű", "assistant", 50000,
-        LocalDateTime.of(2019, 5, 29, 8, 0, 0));
+        LocalDateTime.of(2019, 6, 4, 8, 0, 0));
 
     salaryService.setSalary(testEmployee1);
     System.out.println(testEmployee1.getSalary());

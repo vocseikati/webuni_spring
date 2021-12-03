@@ -1,5 +1,6 @@
 package hu.webuni.hr.katka.configurations;
 
+import java.util.HashMap;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +27,7 @@ public class HrConfigurationProperties {
     this.smart = smart;
   }
 
-  public static class Default{
+  public static class Default {
     private int percent;
 
     public int getPercent() {
@@ -38,13 +39,30 @@ public class HrConfigurationProperties {
     }
   }
 
-  public static class Smart{
+  public static class Smart {
+
+//    private HashMap<Double, Integer> map = new HashMap<>();
+//
+//    public Smart() {
+//      this.map.put(10.0, 10);
+//      this.map.put(5.0, 5);
+//      this.map.put(2.5, 2);
+//    }
+//
+//    public HashMap<Double, Integer> getMap() {
+//      return map;
+//    }
+//
+//    public void setMap(HashMap<Double, Integer> map) {
+//      this.map = map;
+//    }
+
     private int percent1;
     private int percent2;
     private int percent3;
-    private int limit1;
-    private int limit2;
-    private int limit3;
+    private double limit1;
+    private double limit2;
+    private double limit3;
 
     public int getPercent1() {
       return percent1;
@@ -70,27 +88,27 @@ public class HrConfigurationProperties {
       this.percent3 = percent3;
     }
 
-    public int getLimit1() {
+    public double getLimit1() {
       return limit1;
     }
 
-    public void setLimit1(int limit1) {
+    public void setLimit1(double limit1) {
       this.limit1 = limit1;
     }
 
-    public int getLimit2() {
+    public double getLimit2() {
       return limit2;
     }
 
-    public void setLimit2(int limit2) {
+    public void setLimit2(double limit2) {
       this.limit2 = limit2;
     }
 
-    public int getLimit3() {
+    public double getLimit3() {
       return limit3;
     }
 
-    public void setLimit3(int limit3) {
+    public void setLimit3(double limit3) {
       this.limit3 = limit3;
     }
   }
