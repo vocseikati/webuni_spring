@@ -1,11 +1,9 @@
 package hu.webuni.hr.katka;
 
 import hu.webuni.hr.katka.models.Employee;
-import hu.webuni.hr.katka.services.EmployeeService;
 import hu.webuni.hr.katka.services.SalaryService;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,7 +28,7 @@ public class HrApplication implements CommandLineRunner {
         LocalDateTime.of(2016, 9, 1, 8, 0, 0));
 
     Employee testEmployee3 = new Employee(3L, "Zöldfülű", "assistant", 50000,
-        LocalDateTime.of(2019, 6, 4, 8, 0, 0));
+        LocalDateTime.of(2019, 7, 1, 8, 0, 0));
 
     salaryService.setSalary(testEmployee1);
     System.out.println(testEmployee1.getSalary());

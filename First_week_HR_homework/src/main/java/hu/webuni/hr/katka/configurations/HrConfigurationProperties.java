@@ -1,6 +1,6 @@
 package hu.webuni.hr.katka.configurations;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -41,21 +41,7 @@ public class HrConfigurationProperties {
 
   public static class Smart {
 
-//    private HashMap<Double, Integer> map = new HashMap<>();
-//
-//    public Smart() {
-//      this.map.put(10.0, 10);
-//      this.map.put(5.0, 5);
-//      this.map.put(2.5, 2);
-//    }
-//
-//    public HashMap<Double, Integer> getMap() {
-//      return map;
-//    }
-//
-//    public void setMap(HashMap<Double, Integer> map) {
-//      this.map = map;
-//    }
+    private TreeMap<Double, Integer> limits = new TreeMap<>();
 
     private int percent1;
     private int percent2;
@@ -63,6 +49,17 @@ public class HrConfigurationProperties {
     private double limit1;
     private double limit2;
     private double limit3;
+
+    public TreeMap<Double, Integer> getLimits() {
+      this.limits.put(limit1,percent1);
+      this.limits.put(limit2,percent2);
+      this.limits.put(limit3,percent3);
+      return limits;
+    }
+
+    public void setLimits(TreeMap<Double, Integer> limits) {
+      this.limits = limits;
+    }
 
     public int getPercent1() {
       return percent1;
