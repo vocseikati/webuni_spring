@@ -1,4 +1,19 @@
-#spring:
-#  config:
-#    activate:
-#      on-profile: smart
+spring:
+  profiles:
+    active: smart
+
+hr:
+  def:
+    percent: 5
+  smart:
+    limit1: 10
+    limit2: 5
+    limit3: 2.5
+    percent1: 10
+    percent2: 5
+    percent3: 2
+    limits:
+      10: 10
+      5: 5
+      2.5: 2
+      1:  1
