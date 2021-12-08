@@ -29,19 +29,5 @@ public class SmartEmployeeService implements EmployeeService {
 //    Map.Entry<Double, Integer> floorEntry = limits.floorEntry(workedYears);
 //    return floorEntry == null ? 0 : floorEntry.getValue();
 
-
-//    LocalDate now = LocalDateTime.now().toLocalDate();
-//    LocalDate startOfWorkDate = employee.getStartOfWork().toLocalDate();
-//    Period period = Period.between(startOfWorkDate, now);
-//    if (period.getYears() >= config.getSmart().getLimit1()) {
-//      return config.getSmart().getPercent1();
-//    }
-//    if (period.getYears() >= config.getSmart().getLimit2()) {
-//      return config.getSmart().getPercent2();
-//    }
-//    if (period.getYears() >= config.getSmart().getLimit3() && period.getMonths() >= 6) {
-//      return config.getSmart().getPercent3();
-//    }
-//    return 0;
   }
 }

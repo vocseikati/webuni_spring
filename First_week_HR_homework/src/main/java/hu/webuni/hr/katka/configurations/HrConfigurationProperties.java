@@ -41,7 +41,7 @@ public class HrConfigurationProperties {
 
   public static class Smart {
 
-    private TreeMap<Double, Integer> limits = new TreeMap<>();
+    private TreeMap<Double, Integer> limits;
 
     private int percent1;
     private int percent2;
@@ -51,9 +51,6 @@ public class HrConfigurationProperties {
     private double limit3;
 
     public TreeMap<Double, Integer> getLimits() {
-      this.limits.put(limit1,percent1);
-      this.limits.put(limit2,percent2);
-      this.limits.put(limit3,percent3);
       return limits;
     }
 
