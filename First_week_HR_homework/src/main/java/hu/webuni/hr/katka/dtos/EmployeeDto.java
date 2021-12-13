@@ -1,19 +1,21 @@
-package hu.webuni.hr.katka.models;
+package hu.webuni.hr.katka.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 
-public class Employee {
-
+public class EmployeeDto {
   private Long id;
   private String name;
   private String position;
   private int salary;
+
   private LocalDateTime startOfWork;
 
-  public Employee() {
+  public EmployeeDto() {
   }
 
-  public Employee(Long id, String name, String position, int salary, LocalDateTime startOfWork) {
+  public EmployeeDto(Long id, String name, String position, int salary, LocalDateTime startOfWork) {
     this.id = id;
     this.name = name;
     this.position = position;

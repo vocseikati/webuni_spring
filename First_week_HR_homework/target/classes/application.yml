@@ -2,6 +2,10 @@ spring:
   profiles:
     active: smart
 
+mvc:
+  format:
+    date-time: yyyy-MM-dd HH:mm:ss
+
 hr:
   def:
     percent: 5

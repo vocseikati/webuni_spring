@@ -20,23 +20,23 @@ public class HrApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    Employee testEmployee1 =
-        new Employee(1L, "Kata", "leader", 100000,
-            LocalDateTime.of(2011, 9, 1, 8, 0,0));
-
-    Employee testEmployee2 = new Employee(2L, "Laca", "referent", 90000,
-        LocalDateTime.of(2016, 9, 1, 8, 0, 0));
-
-    Employee testEmployee3 = new Employee(3L, "Zöldfülű", "assistant", 50000,
-        LocalDateTime.of(2019, 7, 1, 8, 0, 0));
-
-    salaryService.setSalary(testEmployee1);
-    System.out.println(testEmployee1.getSalary());
-
-    salaryService.setSalary(testEmployee2);
-    System.out.println(testEmployee2.getSalary());
-
-    salaryService.setSalary(testEmployee3);
-    System.out.println(testEmployee3.getSalary());
+//    Employee testEmployee1 =
+//        new Employee(1L, "Kata", "leader", 100000,
+//            LocalDateTime.of(2011, 9, 1, 8, 0,0));
+//
+//    Employee testEmployee2 = new Employee(2L, "Laca", "referent", 90000,
+//        LocalDateTime.of(2016, 9, 1, 8, 0, 0));
+//
+//    Employee testEmployee3 = new Employee(3L, "Zöldfülű", "assistant", 50000,
+//        LocalDateTime.of(2019, 7, 1, 8, 0, 0));
+//
+//    salaryService.setSalary(testEmployee1);
+//    System.out.println(testEmployee1.getSalary());
+//
+//    salaryService.setSalary(testEmployee2);
+//    System.out.println(testEmployee2.getSalary());
+//
+//    salaryService.setSalary(testEmployee3);
+//    System.out.println(testEmployee3.getSalary());
   }
 }
