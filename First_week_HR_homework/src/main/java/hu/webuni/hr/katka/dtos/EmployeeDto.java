@@ -8,11 +8,18 @@ public class EmployeeDto {
   private Long id;
   private String name;
   private String position;
-  private int salary;
+  private Integer salary;
 
   private LocalDateTime startOfWork;
 
   public EmployeeDto() {
+  }
+
+  public EmployeeDto(String name, String position, int salary, LocalDateTime startOfWork) {
+    this.name = name;
+    this.position = position;
+    this.salary = salary;
+    this.startOfWork = startOfWork;
   }
 
   public EmployeeDto(Long id, String name, String position, int salary, LocalDateTime startOfWork) {
@@ -47,11 +54,11 @@ public class EmployeeDto {
     this.position = position;
   }
 
-  public int getSalary() {
+  public Integer getSalary() {
     return salary;
   }
 
-  public void setSalary(int salary) {
+  public void setSalary(Integer salary) {
     this.salary = salary;
   }
 

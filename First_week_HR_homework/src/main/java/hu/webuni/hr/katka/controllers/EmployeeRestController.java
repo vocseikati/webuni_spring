@@ -1,7 +1,7 @@
 package hu.webuni.hr.katka.controllers;
 
 import hu.webuni.hr.katka.dtos.EmployeeDto;
-import hu.webuni.hr.katka.exceptions.NotFoundException;
+import hu.webuni.hr.katka.exceptions.MyException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,8 +58,24 @@ public class EmployeeRestController {
       }
     }
     String error =
-        new NotFoundException("There is no employee with the provided id.").getMessage();
+        new MyException("There is no employee with the provided id.").getMessage();
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+  }
+
+  @PostMapping
+  public ResponseEntity<Object> addNewEmployee(@RequestBody EmployeeDto employee) {
+    try {
+      validateFields(employee, "Employee cannot be null.");
+      validateFields(employee.getName(), "Name cannot be null or empty.");
+      validateFields(employee.getPosition(), "Position cannot be null or empty.");
+      validateFields(employee.getSalary(), "Salary cannot be null.");
+      validateFields(employee.getStartOfWork(), "Date cannot be null.");
+    } catch (IllegalArgumentException ex){
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    employee.setId((long) (employees.size() + 1));
+    employees.put((long) (employees.size() + 1), employee);
+    return ResponseEntity.ok(employee);
   }
 
   private void validateFields(Object o, String message) {
