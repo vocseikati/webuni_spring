@@ -2,13 +2,16 @@ package hu.webuni.hr.katka.controllers;
 
 import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
+import hu.webuni.hr.katka.exceptions.NotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,8 +40,8 @@ public class CompanyRestController {
   }
 
   {
-    companies.add(new CompanyDto("123ad", "BGE", "Markó utca", employeeList1));
-    companies.add(new CompanyDto("456re", "ÓE", "Bécsi út", employeeList2));
+    companies.add(new CompanyDto(1L, "123ad", "BGE", "Markó utca", employeeList1));
+    companies.add(new CompanyDto(2L, "456re", "ÓE", "Bécsi út", employeeList2));
   }
 
   @GetMapping
@@ -46,5 +49,17 @@ public class CompanyRestController {
     Map<String, List<CompanyDto>> map = new HashMap<>();
     map.put("companies", companies);
     return ResponseEntity.ok(map);
+  }
+
+  @GetMapping("{id}")
+  public ResponseEntity<?> getCompanyById(@PathVariable Long id) {
+    for (CompanyDto company : companies) {
+      if (company.getId().equals(id)) {
+        return ResponseEntity.ok(company);
+      }
+    }
+    String error =
+        new NotFoundException("There is no company with the provided id.").getMessage();
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
   }
 }
