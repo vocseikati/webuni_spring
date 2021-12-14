@@ -3,6 +3,7 @@ package hu.webuni.hr.katka.controllers;
 import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,5 +64,32 @@ public class CompanyRestController {
     String error =
         new NotFoundException("There is no company with the provided id.").getMessage();
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+  }
+
+  @PostMapping
+  public ResponseEntity<?> addNewCompany(@RequestBody CompanyDto company){
+    try {
+      validateFields(company, "Company cannot be null.");
+      validateFields(company.getRegistrationNumber(), "Registration Number cannot be null or empty.");
+      validateFields(company.getName(), "Name cannot be null or empty.");
+      validateFields(company.getAddress(), "Address cannot be null.");
+    } catch (IllegalArgumentException ex) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    company.setId((long) (companies.size() + 1));
+    companies.add(company);
+    URI location = URI.create(String.format("api/employees/%s", company.getId()));
+    return ResponseEntity.created(location).body(company);
+  }
+
+  private void validateFields(Object o, String message) {
+    if (o instanceof String) {
+      if (((String) o).isEmpty()) {
+        throw new IllegalArgumentException(message);
+      }
+    }
+    if (o == null) {
+      throw new IllegalArgumentException(message);
+    }
   }
 }
