@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -86,36 +87,54 @@ public class EmployeeRestController {
                                               @RequestBody EmployeeDto employee) {
     validateFields(employee, "Employee cannot be null.");
     validateFields(id, "Id cannot be null!");
-    if (!employees.containsKey(id)){
-      String error = new NotFoundException("There is no employee with the provided id.").getMessage();
+    if (!employees.containsKey(id)) {
+      String error =
+          new NotFoundException("There is no employee with the provided id.").getMessage();
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
     EmployeeDto originalEmployee = employees.get(id);
-    if (employee.getName() != null){
+    if (employee.getName() != null) {
       originalEmployee.setName(employee.getName());
     }
-    if (employee.getPosition() != null){
+    if (employee.getPosition() != null) {
       originalEmployee.setPosition(employee.getPosition());
     }
-    if (employee.getSalary() != null){
+    if (employee.getSalary() != null) {
       originalEmployee.setSalary(employee.getSalary());
     }
-    if (employee.getStartOfWork() != null){
+    if (employee.getStartOfWork() != null) {
       originalEmployee.setStartOfWork(employee.getStartOfWork());
     }
     return ResponseEntity.ok(originalEmployee);
   }
 
   @DeleteMapping("{id}")
-  public ResponseEntity<?> deleteEmployeeById(@PathVariable Long id){
+  public ResponseEntity<?> deleteEmployeeById(@PathVariable Long id) {
     validateFields(id, "Id cannot be null!");
-    if (!employees.containsKey(id)){
-      String error = new NotFoundException("There is no employee with the provided id.").getMessage();
+    if (!employees.containsKey(id)) {
+      String error =
+          new NotFoundException("There is no employee with the provided id.").getMessage();
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
     EmployeeDto deletedEmployee = employees.get(id);
     employees.remove(id);
     return ResponseEntity.ok(deletedEmployee);
+  }
+
+  @GetMapping
+  public ResponseEntity<Map<String, List<EmployeeDto>>> getEmployeeBySalary(
+      @RequestParam Integer limit) {
+
+    Map<String, List<EmployeeDto>> employeesOverLimit = new HashMap<>();
+    List<EmployeeDto> employeesByLimit = new ArrayList<>();
+    for (Map.Entry<Long, EmployeeDto> entry : employees.entrySet()) {
+      EmployeeDto employee = entry.getValue();
+      if (employee.getSalary() > limit) {
+        employeesByLimit.add(employee);
+      }
+    }
+    employeesOverLimit.put("Employees over limit", employeesByLimit);
+    return ResponseEntity.ok(employeesOverLimit);
   }
 
   private void validateFields(Object o, String message) {
