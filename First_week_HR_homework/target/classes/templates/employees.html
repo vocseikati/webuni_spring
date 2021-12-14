@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang = "en" xmlns:th = "http://www.thymeleaf.org">
+  <head>
+    <meta charset = "UTF-8">
+    <title>Employees</title>
+    <link rel = "stylesheet"
+          th:href = "@{webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+  </head>
+  <body>
+    <div class = "container">
+      <h2><a href = "/">Home</a></h2>
+
+      <div class = "title">
+        <h2>List employees</h2>
+      </div>
+      <div>
+        <table class = "table table-dark table-hover" th:if = "${employees}">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Name</th>
+              <th>Position</th>
+              <th>Salary</th>
+              <th>Entry date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each = "employee : ${employees}">
+              <td th:text = "${employee.id}"></td>
+              <td th:text = "${employee.name}"></td>
+              <td th:text = "${employee.position}"></td>
+              <td th:text = "${employee.salary}"></td>
+              <td th:text = "${#temporals.format(employee.startOfWork, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h2>Add employee</h2>
+
+      <h3 th:if = "${error}" th:text = "${error}"></h3>
+
+      <form th:action = "@{/employees}" method = "post" th:object = "${newEmployee}">
+        <div class = "form-group">
+          <label for = "employeeName">Name</label>
+          <input class = "form-control" type = "text" id = "employeeName" th:field = "*{name}">
+        </div>
+        <div class = "form-group">
+          <label for = "employeePosition">Position</label>
+          <input class = "form-control" type = "text" id = "employeePosition"
+                 th:field = "*{position}">
+        </div>
+        <div class = "form-group">
+          <label for = "employeeSalary">Salary</label>
+          <input class = "form-control" type = "number" id = "employeeSalary"
+                 th:field = "*{salary}">
+        </div>
+        <div class = "form-group">
+          <label for = "employeeStartOfWork">Date of start work</label>
+          <input class = "form-control" type="datetime-local" id = "employeeStartOfWork" th:field = "*{startOfWork}">
+        </div>
+
+        <input class = "btn btn-primary" type = "submit" id = "submit" value = "GO">
+      </form>
+
+    </div>
+  </body>
+</html>
