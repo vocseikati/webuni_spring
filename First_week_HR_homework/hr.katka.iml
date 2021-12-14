@@ -93,5 +93,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.13" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.8.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:bootstrap:4.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars:popper.js:2.5.4" level="project" />
   </component>
 </module>

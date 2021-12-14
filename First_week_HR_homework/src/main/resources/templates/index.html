@@ -3,13 +3,16 @@
   <head>
     <meta charset = "UTF-8">
     <title>HR application</title>
+    <link rel = "stylesheet"
+          th:href = "@{webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
   </head>
   <body>
-    <h1>Welcome to my HR application</h1>
+    <div class = "container">
+      <h1>Welcome to my HR application</h1>
 
-    <h2><a href = "/employees">List of employees</a></h2>
+      <h2><a href = "/employees">List of employees</a></h2>
 
-    <h2><a href = "/employees">Add employee</a></h2>
-
+      <h2><a href = "/employees">Add employee</a></h2>
+    </div>
   </body>
 </html>
