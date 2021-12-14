@@ -9,7 +9,7 @@ public class EmployeeDto {
   private String name;
   private String position;
   private Integer salary;
-
+//  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDateTime startOfWork;
 
   public EmployeeDto() {

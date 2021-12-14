@@ -41,13 +41,13 @@ public class EmployeeController {
   public String addEmployee(EmployeeDto employee) {
     try {
       checkFields(employee);
-      employee.setId((long) employees.size()+1);
+      employee.setId((long) employees.size() + 1);
       employee.setStartOfWork(LocalDateTime.now());
       employees.add(employee);
     } catch (IllegalArgumentException ex) {
       return "redirect:/employees?error=" + ex.getMessage();
     }
-    return "redirect:employees";
+    return "redirect:/employees";
   }
 
   private void checkFields(EmployeeDto employee) {
