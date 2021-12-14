@@ -11,9 +11,11 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -80,6 +82,43 @@ public class CompanyRestController {
     companies.add(company);
     URI location = URI.create(String.format("api/employees/%s", company.getId()));
     return ResponseEntity.created(location).body(company);
+  }
+
+  @PutMapping("{id}")
+  public ResponseEntity<?> modifyCompany(@PathVariable Long id, @RequestBody CompanyDto modifiedCompany){
+    for (CompanyDto company : companies) {
+      if (company.getId().equals(id)){
+        if (modifiedCompany.getRegistrationNumber() != null){
+          company.setRegistrationNumber(modifiedCompany.getRegistrationNumber());
+        }
+        if (modifiedCompany.getName() != null){
+          company.setName(modifiedCompany.getName());
+        }
+        if (modifiedCompany.getAddress() != null){
+          company.setAddress(modifiedCompany.getAddress());
+        }
+        if (!modifiedCompany.getEmployeesOfCompany().isEmpty()){
+          company.setEmployeesOfCompany(modifiedCompany.getEmployeesOfCompany());
+        }
+        return ResponseEntity.ok(company);
+      }
+    }
+    String error =
+        new NotFoundException("There is no company with the provided id.").getMessage();
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+  }
+
+  @DeleteMapping("{id}")
+  public ResponseEntity<?> deleteCompanyById(@PathVariable Long id) {
+    for (CompanyDto company : companies) {
+      if (company.getId().equals(id)) {
+        companies.remove(company);
+        return ResponseEntity.noContent().build();
+      }
+    }
+    String error =
+        new NotFoundException("There is no company with the provided id.").getMessage();
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
   }
 
   private void validateFields(Object o, String message) {
