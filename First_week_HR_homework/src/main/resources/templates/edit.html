@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang = "en" xmlns:th = "http://www.thymeleaf.org">
+  <head>
+    <meta charset = "UTF-8">
+    <title>Edit Employee</title>
+    <link rel = "stylesheet"
+          th:href = "@{webjars/bootstrap/4.6.0/css/bootstrap.min.css}"/>
+  </head>
+  <body>
+    <h2>Edit employee</h2>
+    <div>
+      <form th:action = "@{/edit}" th:object = "${employee}" method = "post">
+        Id: <span th:text = "*{id}"> </span><br>
+        <input th:field = "*{id}" type = "hidden"/>
+        <div class = "form-group">
+          <label for = "employeeName">Name</label>
+          <input type = "text" id = "employeeName" th:field = "*{name}">
+        </div>
+        <div class = "form-group">
+          <label for = "employeePosition">Position</label>
+          <input type = "text" id = "employeePosition" th:field = "*{position}">
+        </div>
+        <div class = "form-group">
+          <label for = "employeeSalary">Salary</label>
+          <input type = "number" id = "employeeSalary" th:field = "*{salary}">
+        </div>
+        <div class = "form-group">
+          <label for = "employeeStartOfWork">Date of start work</label>
+          <input type = "text" id = "employeeStartOfWork" th:field = "*{startOfWork}">
+        </div>
+        <input type = "submit" class = "btn btn-primary" value = "GO">
+      </form>
+    </div>
+  </body>
+</html>

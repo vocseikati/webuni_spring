@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -50,7 +51,7 @@ public class CompanyRestController {
   }
 
   @GetMapping
-  public ResponseEntity<Map<String, List<CompanyDto>>> listAllCompanies() {
+  public ResponseEntity<Map<String, List<CompanyDto>>> listAllCompanies(@RequestParam(required=false) String full) {
     Map<String, List<CompanyDto>> map = new HashMap<>();
     map.put("companies", companies);
     return ResponseEntity.ok(map);
