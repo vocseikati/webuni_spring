@@ -20,6 +20,7 @@
               <th>Position</th>
               <th>Salary</th>
               <th>Entry date</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
@@ -29,6 +30,7 @@
               <td th:text = "${employee.position}"></td>
               <td th:text = "${employee.salary}"></td>
               <td th:text = "${#temporals.format(employee.startOfWork, 'yyyy-MM-dd HH:mm:ss')}"></td>
+              <td><a th:href="@{/employees/delete/{id}(id=${employee.id})}">delete</a></td>
             </tr>
           </tbody>
         </table>

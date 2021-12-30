@@ -18,12 +18,12 @@ public class EmployeeController {
 
   private List<EmployeeDto> employees = new ArrayList<>();
 
-//  {
-//    employees.add(new EmployeeDto(1L, "Kata", "leader", 100000,
-//        LocalDateTime.of(2011, 9, 1, 8, 0, 0)));
-//    employees.add(new EmployeeDto(2L, "Laca", "referent", 90000,
-//        LocalDateTime.of(2016, 9, 1, 8, 0, 0)));
-//  }
+  {
+    employees.add(new EmployeeDto(1L, "Kata", "leader", 100000,
+        LocalDateTime.of(2011, 9, 1, 8, 0, 0)));
+    employees.add(new EmployeeDto(2L, "Laca", "referent", 90000,
+        LocalDateTime.of(2016, 9, 1, 8, 0, 0)));
+  }
 
   @GetMapping("/")
   public String home() {
@@ -76,7 +76,11 @@ public class EmployeeController {
     return "redirect:/employees";
   }
 
-//  @GetMapping("/deleteEmployee/{id}")
+  @GetMapping("employees/delete/{id}")
+  public String deleteEmployee(@PathVariable Long id){
+    employees.removeIf(employee -> employee.getId().equals(id));
+    return "redirect:/employees";
+  }
 
   private void checkFields(EmployeeDto employee) {
     if (employee == null) {
