@@ -1,7 +1,11 @@
 package hu.webuni.hr.katka.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
+import hu.webuni.hr.katka.dtos.Views;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -50,11 +54,22 @@ public class CompanyRestController {
     companies.add(new CompanyDto(2L, "456re", "ÓE", "Bécsi út", employeeList2));
   }
 
+  @GetMapping(params = "full=true")
+  @JsonView(Views.Internal.class)
+  public ResponseEntity<Map<String, List<CompanyDto>>> listAllCompaniesFull() {
+    return ResponseEntity.ok(getStringListMap());
+  }
+
   @GetMapping
-  public ResponseEntity<Map<String, List<CompanyDto>>> listAllCompanies(@RequestParam(required=false) String full) {
+  @JsonView(Views.Public.class)
+  public ResponseEntity<Map<String, List<CompanyDto>>> listAllCompaniesWithOutEmployees() {
+    return ResponseEntity.ok(getStringListMap());
+  }
+
+  private Map<String, List<CompanyDto>> getStringListMap() {
     Map<String, List<CompanyDto>> map = new HashMap<>();
     map.put("companies", companies);
-    return ResponseEntity.ok(map);
+    return map;
   }
 
   @GetMapping("{id}")
@@ -70,10 +85,11 @@ public class CompanyRestController {
   }
 
   @PostMapping
-  public ResponseEntity<?> addNewCompany(@RequestBody CompanyDto company){
+  public ResponseEntity<?> addNewCompany(@RequestBody CompanyDto company) {
     try {
       validateFields(company, "Company cannot be null.");
-      validateFields(company.getRegistrationNumber(), "Registration Number cannot be null or empty.");
+      validateFields(company.getRegistrationNumber(),
+          "Registration Number cannot be null or empty.");
       validateFields(company.getName(), "Name cannot be null or empty.");
       validateFields(company.getAddress(), "Address cannot be null.");
     } catch (IllegalArgumentException ex) {
@@ -81,24 +97,25 @@ public class CompanyRestController {
     }
     company.setId((long) (companies.size() + 1));
     companies.add(company);
-    URI location = URI.create(String.format("api/employees/%s", company.getId()));
+    URI location = URI.create(String.format("api/companies/%s", company.getId()));
     return ResponseEntity.created(location).body(company);
   }
 
   @PutMapping("{id}")
-  public ResponseEntity<?> modifyCompany(@PathVariable Long id, @RequestBody CompanyDto modifiedCompany){
+  public ResponseEntity<?> modifyCompany(@PathVariable Long id,
+                                         @RequestBody CompanyDto modifiedCompany) {
     for (CompanyDto company : companies) {
-      if (company.getId().equals(id)){
-        if (modifiedCompany.getRegistrationNumber() != null){
+      if (company.getId().equals(id)) {
+        if (modifiedCompany.getRegistrationNumber() != null) {
           company.setRegistrationNumber(modifiedCompany.getRegistrationNumber());
         }
-        if (modifiedCompany.getName() != null){
+        if (modifiedCompany.getName() != null) {
           company.setName(modifiedCompany.getName());
         }
-        if (modifiedCompany.getAddress() != null){
+        if (modifiedCompany.getAddress() != null) {
           company.setAddress(modifiedCompany.getAddress());
         }
-        if (!modifiedCompany.getEmployeesOfCompany().isEmpty()){
+        if (!modifiedCompany.getEmployeesOfCompany().isEmpty()) {
           company.setEmployeesOfCompany(modifiedCompany.getEmployeesOfCompany());
         }
         return ResponseEntity.ok(company);

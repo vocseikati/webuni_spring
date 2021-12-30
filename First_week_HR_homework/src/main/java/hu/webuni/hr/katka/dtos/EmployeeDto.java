@@ -1,15 +1,19 @@
 package hu.webuni.hr.katka.dtos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import java.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 
 public class EmployeeDto {
+
+  @JsonView(Views.Internal.class)
   private Long id;
+  @JsonView(Views.Internal.class)
   private String name;
+  @JsonView(Views.Internal.class)
   private String position;
+  @JsonView(Views.Internal.class)
   private Integer salary;
-//  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+  @JsonView(Views.Internal.class)
   private LocalDateTime startOfWork;
 
   public EmployeeDto() {

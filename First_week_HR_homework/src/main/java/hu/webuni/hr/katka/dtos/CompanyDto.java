@@ -1,15 +1,20 @@
 package hu.webuni.hr.katka.dtos;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CompanyDto {
 
+  @JsonView(Views.Public.class)
   private Long id;
+  @JsonView(Views.Public.class)
   private String registrationNumber;
+  @JsonView(Views.Public.class)
   private String name;
+  @JsonView(Views.Public.class)
   private String address;
-
+  @JsonView(Views.Internal.class)
   private List<EmployeeDto> employeesOfCompany = new ArrayList<>();
 
   public CompanyDto() {
@@ -22,6 +27,13 @@ public class CompanyDto {
     this.name = name;
     this.address = address;
     this.employeesOfCompany = employeesOfCompany;
+  }
+
+  public CompanyDto(Long id, String registrationNumber, String name, String address) {
+    this.id = id;
+    this.registrationNumber = registrationNumber;
+    this.name = name;
+    this.address = address;
   }
 
   public Long getId() {
