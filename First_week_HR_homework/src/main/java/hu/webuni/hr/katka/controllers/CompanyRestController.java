@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -67,7 +68,7 @@ public class CompanyRestController {
   @JsonView(Views.Public.class)
   public ResponseEntity<?> getCompanyByIdWithoutEmployees(@PathVariable Long id) {
     CompanyDto companyById = getCompanyById(id);
-    if (companyById != null){
+    if (companyById != null) {
       return ResponseEntity.ok(companyById);
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
@@ -77,7 +78,7 @@ public class CompanyRestController {
   @JsonView(Views.Internal.class)
   public ResponseEntity<?> getCompanyByIdFull(@PathVariable Long id) {
     CompanyDto companyById = getCompanyById(id);
-    if (companyById != null){
+    if (companyById != null) {
       return ResponseEntity.ok(companyById);
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
@@ -98,6 +99,19 @@ public class CompanyRestController {
     companies.add(company);
     URI location = URI.create(String.format("api/companies/%s", company.getId()));
     return ResponseEntity.created(location).body(company);
+  }
+
+  @PostMapping("{id}/employees")
+  public ResponseEntity<?> addNewEmployee(@PathVariable Long id,
+                                          @RequestBody EmployeeDto newEmployee) {
+    CompanyDto companyById = getCompanyById(id);
+    if (companyById != null) {
+      List<EmployeeDto> employeesOfCompany = companyById.getEmployeesOfCompany();
+      newEmployee.setId((long) (employeesOfCompany.size() + 1));
+      employeesOfCompany.add(newEmployee);
+      return ResponseEntity.ok(companyById);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
   }
 
   @PutMapping("{id}")
@@ -125,11 +139,39 @@ public class CompanyRestController {
 
   @DeleteMapping("{id}")
   public ResponseEntity<?> deleteCompanyById(@PathVariable Long id) {
-    for (CompanyDto company : companies) {
-      if (company.getId().equals(id)) {
-        companies.remove(company);
-        return ResponseEntity.noContent().build();
+    CompanyDto companyById = getCompanyById(id);
+    if (companyById != null) {
+      companies.remove(companyById);
+      return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
+  }
+
+  @DeleteMapping("{id}/employees/{employeeId}")
+  public ResponseEntity<?> deleteEmployeeFromCompanyById(@PathVariable Long id,
+                                                         @PathVariable Long employeeId) {
+    CompanyDto companyById = getCompanyById(id);
+    if (companyById != null) {
+      List<EmployeeDto> employeesOfCompany = companyById.getEmployeesOfCompany();
+      for (EmployeeDto employee : employeesOfCompany) {
+        if (employee.getId().equals(employeeId)) {
+          employeesOfCompany.remove(employee);
+          return ResponseEntity.ok(companyById);
+        }
       }
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body("There is no employee with the provided id.");
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
+  }
+
+  @PutMapping("/{id}/employees")
+  public ResponseEntity<?> replaceAllEmployees(@PathVariable Long id,
+                                               @RequestBody List<EmployeeDto> employees) {
+    CompanyDto companyById = getCompanyById(id);
+    if (companyById != null) {
+      companyById.setEmployeesOfCompany(employees);
+      return ResponseEntity.ok(companyById);
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
   }
@@ -140,9 +182,9 @@ public class CompanyRestController {
     return map;
   }
 
-  private CompanyDto getCompanyById(Long id){
+  private CompanyDto getCompanyById(Long id) {
     for (CompanyDto company : companies) {
-      if (company.getId().equals(id)){
+      if (company.getId().equals(id)) {
         return company;
       }
     }
