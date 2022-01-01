@@ -1,8 +1,6 @@
 package hu.webuni.hr.katka.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.dtos.Views;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -57,31 +54,33 @@ public class CompanyRestController {
   @GetMapping(params = "full=true")
   @JsonView(Views.Internal.class)
   public ResponseEntity<Map<String, List<CompanyDto>>> listAllCompaniesFull() {
-    return ResponseEntity.ok(getStringListMap());
+    return ResponseEntity.ok(getListAllResponse());
   }
 
   @GetMapping
   @JsonView(Views.Public.class)
   public ResponseEntity<Map<String, List<CompanyDto>>> listAllCompaniesWithOutEmployees() {
-    return ResponseEntity.ok(getStringListMap());
-  }
-
-  private Map<String, List<CompanyDto>> getStringListMap() {
-    Map<String, List<CompanyDto>> map = new HashMap<>();
-    map.put("companies", companies);
-    return map;
+    return ResponseEntity.ok(getListAllResponse());
   }
 
   @GetMapping("{id}")
-  public ResponseEntity<?> getCompanyById(@PathVariable Long id) {
-    for (CompanyDto company : companies) {
-      if (company.getId().equals(id)) {
-        return ResponseEntity.ok(company);
-      }
+  @JsonView(Views.Public.class)
+  public ResponseEntity<?> getCompanyByIdWithoutEmployees(@PathVariable Long id) {
+    CompanyDto companyById = getCompanyById(id);
+    if (companyById != null){
+      return ResponseEntity.ok(companyById);
     }
-    String error =
-        new NotFoundException("There is no company with the provided id.").getMessage();
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
+  }
+
+  @GetMapping(value = "{id}", params = "full=true")
+  @JsonView(Views.Internal.class)
+  public ResponseEntity<?> getCompanyByIdFull(@PathVariable Long id) {
+    CompanyDto companyById = getCompanyById(id);
+    if (companyById != null){
+      return ResponseEntity.ok(companyById);
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
   }
 
   @PostMapping
@@ -121,9 +120,7 @@ public class CompanyRestController {
         return ResponseEntity.ok(company);
       }
     }
-    String error =
-        new NotFoundException("There is no company with the provided id.").getMessage();
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
   }
 
   @DeleteMapping("{id}")
@@ -134,9 +131,26 @@ public class CompanyRestController {
         return ResponseEntity.noContent().build();
       }
     }
-    String error =
-        new NotFoundException("There is no company with the provided id.").getMessage();
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(getErrorMessage());
+  }
+
+  private Map<String, List<CompanyDto>> getListAllResponse() {
+    Map<String, List<CompanyDto>> map = new HashMap<>();
+    map.put("companies", companies);
+    return map;
+  }
+
+  private CompanyDto getCompanyById(Long id){
+    for (CompanyDto company : companies) {
+      if (company.getId().equals(id)){
+        return company;
+      }
+    }
+    return null;
+  }
+
+  private String getErrorMessage() {
+    return new NotFoundException("There is no company with the provided id.").getMessage();
   }
 
   private void validateFields(Object o, String message) {
