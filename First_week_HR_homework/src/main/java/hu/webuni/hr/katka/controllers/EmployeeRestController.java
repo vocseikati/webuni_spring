@@ -2,12 +2,15 @@ package hu.webuni.hr.katka.controllers;
 
 import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
+import hu.webuni.hr.katka.models.Employee;
+import hu.webuni.hr.katka.services.EmployeeService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,6 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/employees")
 public class EmployeeRestController {
+
+  @Autowired
+  EmployeeService employeeService;
 
   private List<EmployeeDto> employeeList = new ArrayList<>();
 
@@ -135,6 +141,13 @@ public class EmployeeRestController {
     }
     employeesOverLimit.put("Employees over limit", employeesByLimit);
     return ResponseEntity.ok(employeesOverLimit);
+  }
+
+  @PostMapping("/payRaise")
+  public int getPayRaisePercent(@RequestBody EmployeeDto employee) {
+    Employee convertedEmployee = new Employee(employee.getId(), employee.getName(), employee.getPosition(),
+        employee.getSalary(), employee.getStartOfWork());
+    return employeeService.getPayRaisePercent(convertedEmployee);
   }
 
   private void validateFields(Object o, String message) {
