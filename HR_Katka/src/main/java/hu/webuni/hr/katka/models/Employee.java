@@ -1,13 +1,20 @@
 package hu.webuni.hr.katka.models;
 
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Positive;
 
 public class Employee {
 
   private Long id;
+  @NotEmpty(message = "Name must have a value.")
   private String name;
+  @NotEmpty(message = "Position must have a value.")
   private String position;
+  @Positive
   private int salary;
+  @Past(message = "Entry date must be in the past.")
   private LocalDateTime startOfWork;
 
   public Employee() {

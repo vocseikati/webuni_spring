@@ -2,12 +2,14 @@ package hu.webuni.hr.katka.dtos;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import java.time.LocalDateTime;
+import javax.validation.constraints.NotEmpty;
 
 public class EmployeeDto {
 
   @JsonView(Views.Internal.class)
   private Long id;
   @JsonView(Views.Internal.class)
+  @NotEmpty(message = "Name must have a value.")
   private String name;
   @JsonView(Views.Internal.class)
   private String position;

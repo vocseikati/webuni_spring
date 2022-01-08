@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,16 +73,16 @@ public class EmployeeRestController {
   }
 
   @PostMapping
-  public ResponseEntity<Object> addNewEmployee(@RequestBody EmployeeDto employee) {
-    try {
-      validateFields(employee, "Employee cannot be null.");
-      validateFields(employee.getName(), "Name cannot be null or empty.");
-      validateFields(employee.getPosition(), "Position cannot be null or empty.");
-      validateFields(employee.getSalary(), "Salary cannot be null.");
-      validateFields(employee.getStartOfWork(), "Date cannot be null.");
-    } catch (IllegalArgumentException ex) {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
+  public ResponseEntity<Object> addNewEmployee(@RequestBody @Valid EmployeeDto employee) {
+//    try {
+//      validateFields(employee, "Employee cannot be null.");
+//      validateFields(employee.getName(), "Name cannot be null or empty.");
+//      validateFields(employee.getPosition(), "Position cannot be null or empty.");
+//      validateFields(employee.getSalary(), "Salary cannot be null.");
+//      validateFields(employee.getStartOfWork(), "Date cannot be null.");
+//    } catch (IllegalArgumentException ex) {
+//      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+//    }
     employee.setId((long) (employees.size() + 1));
     employees.put((long) (employees.size() + 1), employee);
     URI location = URI.create(String.format("api/employees/%s", employee.getId()));
