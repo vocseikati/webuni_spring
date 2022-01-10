@@ -1,7 +1,6 @@
 package hu.webuni.hr.katka.services;
 
 import hu.webuni.hr.katka.models.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,6 +1,5 @@
 package hu.webuni.hr.katka.services;
 
-import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.models.Employee;
 import java.util.List;
 

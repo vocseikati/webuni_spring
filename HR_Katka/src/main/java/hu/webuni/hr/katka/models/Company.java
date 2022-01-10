@@ -1,6 +1,5 @@
 package hu.webuni.hr.katka.models;
 
-import hu.webuni.hr.katka.dtos.EmployeeDto;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,13 +8,13 @@ public class Company {
   private String registrationNumber;
   private String name;
   private String address;
-  private List<EmployeeDto> employeesOfCompany = new ArrayList<>();
+  private List<Employee> employeesOfCompany = new ArrayList<>();
 
   public Company() {
   }
 
   public Company(Long id, String registrationNumber, String name, String address,
-                 List<EmployeeDto> employeesOfCompany) {
+                 List<Employee> employeesOfCompany) {
     this.id = id;
     this.registrationNumber = registrationNumber;
     this.name = name;
@@ -55,11 +54,11 @@ public class Company {
     this.address = address;
   }
 
-  public List<EmployeeDto> getEmployeesOfCompany() {
+  public List<Employee> getEmployeesOfCompany() {
     return employeesOfCompany;
   }
 
-  public void setEmployeesOfCompany(List<EmployeeDto> employeesOfCompany) {
+  public void setEmployeesOfCompany(List<Employee> employeesOfCompany) {
     this.employeesOfCompany = employeesOfCompany;
   }
 }

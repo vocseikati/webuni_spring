@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-01-10T22:23:40+0100",
+    date = "2022-01-11T00:41:26+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.13 (Eclipse Adoptium)"
 )
 @Component
@@ -24,6 +24,20 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         List<EmployeeDto> list = new ArrayList<EmployeeDto>( employees.size() );
         for ( Employee employee : employees ) {
             list.add( employeeToDto( employee ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<Employee> dtosToEmployees(List<EmployeeDto> employeeDtos) {
+        if ( employeeDtos == null ) {
+            return null;
+        }
+
+        List<Employee> list = new ArrayList<Employee>( employeeDtos.size() );
+        for ( EmployeeDto employeeDto : employeeDtos ) {
+            list.add( dtoToEmployee( employeeDto ) );
         }
 
         return list;

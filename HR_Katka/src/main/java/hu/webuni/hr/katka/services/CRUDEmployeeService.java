@@ -1,6 +1,5 @@
 package hu.webuni.hr.katka.services;
 
-import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.models.Employee;
 import java.time.LocalDateTime;
@@ -8,12 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 public abstract class CRUDEmployeeService {
-
 
   private List<Employee> employeeList = new ArrayList<>();
 
@@ -32,6 +27,7 @@ public abstract class CRUDEmployeeService {
   }
 
   public Employee save(Employee employee) {
+    employee.setId(employees.size() + 1L);
     employees.put(employee.getId(), employee);
     return employee;
   }
@@ -43,20 +39,20 @@ public abstract class CRUDEmployeeService {
   public Employee findById(Long id) {
     Employee employeeById = employees.get(id);
     if (employeeById == null) {
-     throw new NotFoundException("There is no employee with the provided id.");
+      throw new NotFoundException("There is no employee with the provided id.");
     }
     return employeeById;
   }
 
   public void delete(Long id) {
-    if (!employees.containsKey(id)){
+    if (!employees.containsKey(id)) {
       throw new NotFoundException("There is no employee with the provided id.");
     }
     employees.remove(id);
   }
 
-  public Employee modifyEmployee (Long id, Employee employee){
-    if (!employees.containsKey(id)){
+  public Employee modifyEmployee(Long id, Employee employee) {
+    if (!employees.containsKey(id)) {
       throw new NotFoundException("There is no employee with the provided id.");
     }
     Employee originalEmployee = employees.get(id);
@@ -74,7 +70,7 @@ public abstract class CRUDEmployeeService {
     return originalEmployee;
   }
 
-  public List<Employee> getEmployeesOverLimit(Integer limit){
+  public List<Employee> getEmployeesOverLimit(Integer limit) {
     List<Employee> employeesByLimit = new ArrayList<>();
     for (Map.Entry<Long, Employee> entry : employees.entrySet()) {
       Employee employee = entry.getValue();
