@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SmartEmployeeService implements EmployeeService {
+public class SmartEmployeeService extends CRUDEmployeeService implements EmployeeService {
 
   @Autowired
   HrConfigurationProperties config;
@@ -28,6 +28,5 @@ public class SmartEmployeeService implements EmployeeService {
 //    másik megoldás:
 //    Map.Entry<Double, Integer> floorEntry = limits.floorEntry(workedYears);
 //    return floorEntry == null ? 0 : floorEntry.getValue();
-
   }
 }

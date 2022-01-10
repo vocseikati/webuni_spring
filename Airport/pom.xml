@@ -15,8 +15,9 @@
     <description>Airport Application</description>
     <properties>
         <java.version>11</java.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
     </properties>
-    <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

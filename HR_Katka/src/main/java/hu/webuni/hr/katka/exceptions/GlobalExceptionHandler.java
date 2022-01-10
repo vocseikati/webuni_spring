@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,5 +29,33 @@ public class GlobalExceptionHandler {
         .build();
 
     return ResponseEntity.status(BAD_REQUEST).body(response);
+  }
+
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<ErrorResponse> notFoundHandler(NotFoundException e,
+                                                       WebRequest request) {
+    ErrorResponse response = new ErrorResponse.ErrorResponseBuilder()
+        .statusCode(e.getStatus().value())
+        .timeStamp(LocalDateTime.now())
+        .message(e.getMessage())
+        .build();
+
+    return ResponseEntity.status(e.getStatus()).body(response);
+  }
+
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ErrorResponse> illegalArgumentExceptionHandler(IllegalArgumentException e) {
+
+    ErrorResponse response = getBadRequestResponse(e.getMessage());
+
+    return ResponseEntity.status(response.getStatusCode()).body(response);
+  }
+
+  private ErrorResponse getBadRequestResponse(String message) {
+    return new ErrorResponse.ErrorResponseBuilder()
+        .statusCode(HttpStatus.BAD_REQUEST.value())
+        .timeStamp(LocalDateTime.now())
+        .message(HttpStatus.BAD_REQUEST + " \"" + message + "\"")
+        .build();
   }
 }
