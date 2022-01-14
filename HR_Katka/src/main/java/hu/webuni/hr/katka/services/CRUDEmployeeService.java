@@ -9,10 +9,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class CRUDEmployeeService implements EmployeeService{
+public abstract class CRUDEmployeeService implements EmployeeService {
 
   @Autowired
-  EmployeeRepository employeeRepository;
+  private EmployeeRepository employeeRepository;
 
   public Employee save(Employee employee) {
     return employeeRepository.save(employee);
@@ -63,15 +63,15 @@ public abstract class CRUDEmployeeService implements EmployeeService{
     return employeeById.get();
   }
 
-  public List<Employee> findByPosition(String position){
+  public List<Employee> findByPosition(String position) {
     return employeeRepository.findEmployeesByPosition(position);
   }
 
-  public List<Employee> findByName(String name){
+  public List<Employee> findByName(String name) {
     return employeeRepository.findAllByNameStartsWithIgnoreCase(name);
   }
 
-  public List<Employee> findByStartOfWorkBetween(LocalDateTime startDate, LocalDateTime endDate){
-    return employeeRepository.findByStartOfWorkBetween(startDate,endDate);
+  public List<Employee> findByStartOfWorkBetween(LocalDateTime startDate, LocalDateTime endDate) {
+    return employeeRepository.findByStartOfWorkBetween(startDate, endDate);
   }
 }

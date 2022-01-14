@@ -7,10 +7,8 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -77,7 +75,7 @@ public class EmployeeController {
   }
 
   @GetMapping("employees/delete/{id}")
-  public String deleteEmployee(@PathVariable Long id){
+  public String deleteEmployee(@PathVariable Long id) {
     employees.removeIf(employee -> employee.getId().equals(id));
     return "redirect:/employees";
   }

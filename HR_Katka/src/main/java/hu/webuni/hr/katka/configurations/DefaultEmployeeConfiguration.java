@@ -2,7 +2,6 @@ package hu.webuni.hr.katka.configurations;
 
 import hu.webuni.hr.katka.services.DefaultEmployeeService;
 import hu.webuni.hr.katka.services.EmployeeService;
-import hu.webuni.hr.katka.services.SmartEmployeeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -12,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 public class DefaultEmployeeConfiguration {
 
   @Bean
-  public EmployeeService employeeService(){
+  public EmployeeService employeeService() {
     return new DefaultEmployeeService();
   }
 }

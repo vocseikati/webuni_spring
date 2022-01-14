@@ -2,8 +2,6 @@ package hu.webuni.hr.katka.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import java.util.List;
-import org.springframework.validation.FieldError;
 
 public class ErrorResponse {
 

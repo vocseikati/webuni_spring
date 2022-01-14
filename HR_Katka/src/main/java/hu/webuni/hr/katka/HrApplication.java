@@ -1,8 +1,6 @@
 package hu.webuni.hr.katka;
 
-import hu.webuni.hr.katka.models.Employee;
 import hu.webuni.hr.katka.services.SalaryService;
-import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

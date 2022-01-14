@@ -21,7 +21,7 @@ public class SmartEmployeeService extends CRUDEmployeeService implements Employe
     double workedYears =
         ChronoUnit.MONTHS.between(employee.getStartOfWork(), LocalDateTime.now()) / 12.0;
     Double limit = limits.floorKey(workedYears);
-    if (limit == null){
+    if (limit == null) {
       return 0;
     }
     return limit.intValue();
