@@ -2,8 +2,16 @@ package hu.webuni.hr.katka.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+//@Entity
 public class Company {
+
+//  @Id
+//  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String registrationNumber;
   private String name;
