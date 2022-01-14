@@ -5,6 +5,7 @@ import hu.webuni.airport.dtos.AirportDto;
 import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.services.AirportService;
 import java.util.List;
+import java.util.NoSuchElementException;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,12 +37,10 @@ public class AirportRestController {
 
   @GetMapping("/{id}")
   public AirportDto getById(@PathVariable long id) {
-    Airport airport = airportService.findById(id);
+    Airport airport = airportService.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-    if (airport != null) {
-      return airportMapper.airportToDto(airport);
-    }
-    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    return airportMapper.airportToDto(airport);
   }
 
   @PostMapping
@@ -55,8 +54,12 @@ public class AirportRestController {
                                                   @PathVariable long id) {
     Airport airport = airportMapper.dtoToAirport(airportDto);
     airport.setId(id);
-    AirportDto savedAirportDto = airportMapper.airportToDto(airportService.update(airport));
-    return ResponseEntity.ok(savedAirportDto);
+    try {
+      AirportDto savedAirportDto = airportMapper.airportToDto(airportService.update(airport));
+      return ResponseEntity.ok(savedAirportDto);
+    } catch (NoSuchElementException e){
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
   }
 
   @DeleteMapping("/{id}")

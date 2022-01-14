@@ -7,8 +7,8 @@ import javax.persistence.NamedQuery;
 import javax.validation.constraints.Size;
 
 @Entity
-@NamedQuery(name = "Airport.countByIata", query = "SELECT count(a.id) from Airport a WHERE a.iata=:iata")
-@NamedQuery(name = "Airport.countByIataAndIdNotIn", query = "SELECT count(a.id) from Airport a WHERE a.iata=:iata and a.id !=:id")
+//@NamedQuery(name = "Airport.countByIata", query = "SELECT count(a.id) from Airport a WHERE a.iata=:iata")
+//@NamedQuery(name = "Airport.countByIataAndIdNotIn", query = "SELECT count(a.id) from Airport a WHERE a.iata=:iata and a.id !=:id")
 public class Airport {
 
   @Id
