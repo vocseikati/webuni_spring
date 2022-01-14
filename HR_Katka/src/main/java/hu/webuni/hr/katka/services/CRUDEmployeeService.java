@@ -4,33 +4,15 @@ import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.models.Employee;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class CRUDEmployeeService {
+public abstract class CRUDEmployeeService implements EmployeeService{
 
   @Autowired
   EmployeeRepository employeeRepository;
-
-//  private List<Employee> employeeList = new ArrayList<>();
-//
-//  {
-//    employeeList.add(new Employee(1L, "Kata", "leader", 100000,
-//        LocalDateTime.of(2011, 9, 1, 8, 0, 0)));
-//    employeeList.add(new Employee(2L, "Laca", "referent", 90000,
-//        LocalDateTime.of(2016, 9, 1, 8, 0, 0)));
-//  }
-//
-//  private Map<Long, Employee> employees = new HashMap<>();
-//
-//  {
-//    employees.put(1L, employeeList.get(0));
-//    employees.put(2L, employeeList.get(1));
-//  }
 
   public Employee save(Employee employee) {
     return employeeRepository.save(employee);
@@ -66,13 +48,10 @@ public abstract class CRUDEmployeeService {
   }
 
   public List<Employee> getEmployeesOverLimit(Integer limit) {
-    List<Employee> employeesByLimit = new ArrayList<>();
+    List<Employee> employeesByLimit;
     List<Employee> employees = findAll();
-    for (Employee employee : employees) {
-      if (employee.getSalary() > limit) {
-        employeesByLimit.add(employee);
-      }
-    }
+    employeesByLimit = employees.stream().filter(employee -> employee.getSalary() > limit)
+        .collect(Collectors.toList());
     return employeesByLimit;
   }
 
@@ -84,4 +63,15 @@ public abstract class CRUDEmployeeService {
     return employeeById.get();
   }
 
+  public List<Employee> findByPosition(String position){
+    return employeeRepository.findEmployeesByPosition(position);
+  }
+
+  public List<Employee> findByName(String name){
+    return employeeRepository.findAllByNameStartsWithIgnoreCase(name);
+  }
+
+  public List<Employee> findByStartOfWorkBetween(LocalDateTime startDate, LocalDateTime endDate){
+    return employeeRepository.findByStartOfWorkBetween(startDate,endDate);
+  }
 }

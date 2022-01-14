@@ -4,6 +4,7 @@ import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.mapper.EmployeeMapper;
 import hu.webuni.hr.katka.models.Employee;
 import hu.webuni.hr.katka.services.EmployeeService;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +80,26 @@ public class EmployeeRestController {
   public int getPayRaisePercent(@RequestBody EmployeeDto employee) {
     Employee convertedEmployee = employeeMapper.dtoToEmployee(employee);
     return employeeService.getPayRaisePercent(convertedEmployee);
+  }
+
+  @GetMapping("/position")
+  public List<EmployeeDto> getByPosition(@RequestParam String position) {
+    List<Employee> byPosition = employeeService.findByPosition(position);
+    return employeeMapper.employeesToDtos(byPosition);
+  }
+
+  @GetMapping("/name")
+  public List<EmployeeDto> getByName(@RequestParam String name) {
+    List<Employee> byName = employeeService.findByName(name);
+    return employeeMapper.employeesToDtos(byName);
+  }
+
+  @GetMapping("/entryDate")
+  public List<EmployeeDto> getByEntryDate(@RequestParam LocalDateTime startDate,
+                                          @RequestParam LocalDateTime endDate) {
+    List<Employee> employees =
+        employeeService.findByStartOfWorkBetween(startDate, endDate);
+    return employeeMapper.employeesToDtos(employees);
   }
 
   private void validateFields(Object o, String message) {
