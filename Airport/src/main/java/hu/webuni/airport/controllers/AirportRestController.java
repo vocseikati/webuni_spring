@@ -8,9 +8,12 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +38,7 @@ public class AirportRestController {
   public AirportDto getById(@PathVariable long id) {
     Airport airport = airportService.findById(id);
 
-    if (airport != null){
+    if (airport != null) {
       return airportMapper.airportToDto(airport);
     }
     throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -43,27 +46,22 @@ public class AirportRestController {
 
   @PostMapping
   public AirportDto createAirport(@RequestBody @Valid AirportDto airportDto) {
-        Airport airport = airportService.save(airportMapper.dtoToAirport(airportDto));
-        return airportMapper.airportToDto(airport);
+    Airport airport = airportService.save(airportMapper.dtoToAirport(airportDto));
+    return airportMapper.airportToDto(airport);
   }
 
+  @PutMapping("/{id}") //ami az url-ben jön, az a mérvadó!
+  public ResponseEntity<AirportDto> modifyAirport(@RequestBody AirportDto airportDto,
+                                                  @PathVariable long id) {
+    Airport airport = airportMapper.dtoToAirport(airportDto);
+    airport.setId(id);
+    AirportDto savedAirportDto = airportMapper.airportToDto(airportService.update(airport));
+    return ResponseEntity.ok(savedAirportDto);
+  }
 
-//
-//  @PutMapping("/{id}") //ami az url-ben jön, az a mérvadó!
-//  public ResponseEntity<AirportDto> modifyAirport(@RequestBody AirportDto airportDto,
-//                                                  @PathVariable long id) {
-//    checkUniqueIata(airportDto.getIata());
-//    if (!airports.containsKey(id)) {
-//      return ResponseEntity.notFound().build();
-//    }
-//    airportDto.setId(id);
-//    airports.put(id, airportDto);
-//    return ResponseEntity.ok(airportDto);
-//  }
-//
-//  @DeleteMapping("/{id}")
-//  public void deleteAirport(@PathVariable long id) {
-//    airports.remove(id);
-//  }
+  @DeleteMapping("/{id}")
+  public void deleteAirport(@PathVariable long id) {
+    airportService.delete(id);
+  }
 
 }
