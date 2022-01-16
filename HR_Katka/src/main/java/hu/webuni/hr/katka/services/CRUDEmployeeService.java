@@ -1,7 +1,7 @@
 package hu.webuni.hr.katka.services;
 
 import hu.webuni.hr.katka.exceptions.NotFoundException;
-import hu.webuni.hr.katka.models.Employee;
+import hu.webuni.hr.katka.entities.Employee;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
 import java.time.LocalDateTime;
 import java.util.List;

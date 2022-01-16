@@ -1,7 +1,7 @@
 package hu.webuni.hr.katka.mapper;
 
 import hu.webuni.hr.katka.dtos.EmployeeDto;
-import hu.webuni.hr.katka.models.Employee;
+import hu.webuni.hr.katka.entities.Employee;
 import java.util.List;
 import org.mapstruct.Mapper;
 

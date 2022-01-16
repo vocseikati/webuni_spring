@@ -1,6 +1,6 @@
 package hu.webuni.hr.katka.services;
 
-import hu.webuni.hr.katka.models.Employee;
+import hu.webuni.hr.katka.entities.Employee;
 import java.time.LocalDateTime;
 import java.util.List;
 

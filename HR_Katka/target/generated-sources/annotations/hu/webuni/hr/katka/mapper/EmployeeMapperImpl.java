@@ -1,7 +1,7 @@
 package hu.webuni.hr.katka.mapper;
 
 import hu.webuni.hr.katka.dtos.EmployeeDto;
-import hu.webuni.hr.katka.models.Employee;
+import hu.webuni.hr.katka.entities.Employee;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-01-14T22:08:18+0100",
+    date = "2022-01-16T08:54:18+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.13 (Eclipse Adoptium)"
 )
 @Component

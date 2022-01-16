@@ -2,7 +2,7 @@ package hu.webuni.hr.katka.controllers;
 
 import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.mapper.EmployeeMapper;
-import hu.webuni.hr.katka.models.Employee;
+import hu.webuni.hr.katka.entities.Employee;
 import hu.webuni.hr.katka.services.EmployeeService;
 import java.time.LocalDateTime;
 import java.util.HashMap;
