@@ -10,7 +10,7 @@ public class EmployeeDto {
   private Long id;
   @NotEmpty(message = "Name must have a value.")
   private String name;
-  @NotEmpty(message = "Position must have a value.")
+  @NotEmpty(message = "Title must have a value.")
   private String title;
   @Positive(message = "Salary must be positive.")
   private Integer salary;
