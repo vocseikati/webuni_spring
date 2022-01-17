@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -34,37 +35,57 @@ public class CompanyRestController {
   @Autowired
   EmployeeMapper employeeMapper;
 
-  @GetMapping(params = "full=true")
-  @JsonView(Views.Internal.class)
-  public List<CompanyDto> listAllCompaniesFull() {
-    List<Company> companies = companyService.findAll();
-    return companyMapper.companiesToDtos(companies);
-  }
-
   @GetMapping
-  @JsonView(Views.Public.class)
-  public List<CompanyDto> listAllCompaniesWithOutEmployees() {
+  public List<CompanyDto> listAllCompanies(@RequestParam(required = false) Boolean full) {
     List<Company> companies = companyService.findAll();
-    return companyMapper.companiesToDtos(companies);
+    if (full != null && full) {
+      return companyMapper.companiesToDtos(companies);
+    } else {
+      return companyMapper.companiesToSummaryDtos(companies);
+    }
   }
 
   @GetMapping("{id}")
-  @JsonView(Views.Public.class)
-  public CompanyDto getCompanyByIdWithoutEmployees(@PathVariable Long id) {
-    Company companyById = companyService.findById(id);
-    return companyMapper.companyToDto(companyById);
+  public CompanyDto getCompanyByIdWithoutEmployees(@PathVariable Long id,
+                                                   @RequestParam(required = false) Boolean full) {
+    Company company = companyService.findById(id);
+    if (full != null && full) {
+      return companyMapper.companyToDto(company);
+    } else {
+      return companyMapper.companyToSummaryDto(company);
+    }
   }
 
-  @GetMapping(value = "{id}", params = "full=true")
-  @JsonView(Views.Internal.class)
-  public CompanyDto getCompanyByIdFull(@PathVariable Long id) {
-    Company companyById = companyService.findById(id);
-    return companyMapper.companyToDto(companyById);
-  }
+//  @GetMapping(params = "full=true")
+//  @JsonView(Views.Internal.class)
+//  public List<CompanyDto> listAllCompaniesFull() {
+//    List<Company> companies = companyService.findAll();
+//    return companyMapper.companiesToDtos(companies);
+//  }
+//
+//  @GetMapping
+//  @JsonView(Views.Public.class)
+//  public List<CompanyDto> listAllCompaniesWithOutEmployees() {
+//    List<Company> companies = companyService.findAll();
+//    return companyMapper.companiesToDtos(companies);
+//  }
+//
+//  @GetMapping("{id}")
+//  @JsonView(Views.Public.class)
+//  public CompanyDto getCompanyByIdWithoutEmployees(@PathVariable Long id) {
+//    Company companyById = companyService.findById(id);
+//    return companyMapper.companyToDto(companyById);
+//  }
+//
+//  @GetMapping(value = "{id}", params = "full=true")
+//  @JsonView(Views.Internal.class)
+//  public CompanyDto getCompanyByIdFull(@PathVariable Long id) {
+//    Company companyById = companyService.findById(id);
+//    return companyMapper.companyToDto(companyById);
+//  }
 
   @PostMapping
   public CompanyDto addNewCompany(@RequestBody @Valid CompanyDto company) {
-    validateFields(company, "Company cannot be null.");
     Company savedCompany = companyService.save(companyMapper.dtoToCompany(company));
     return companyMapper.companyToDto(savedCompany);
   }
@@ -80,8 +101,6 @@ public class CompanyRestController {
   @PutMapping("{id}")
   public CompanyDto modifyCompany(@PathVariable Long id,
                                   @RequestBody CompanyDto companyDto) {
-    validateFields(companyDto, "Company cannot be null.");
-    validateFields(id, "Id cannot be null!");
     Company modifiedCompany =
         companyService.modifyCompany(id, companyMapper.dtoToCompany(companyDto));
     return companyMapper.companyToDto(modifiedCompany);
@@ -89,7 +108,6 @@ public class CompanyRestController {
 
   @DeleteMapping("{id}")
   public void deleteCompanyById(@PathVariable Long id) {
-    validateFields(id, "Id cannot be null!");
     companyService.delete(id);
   }
 
@@ -108,14 +126,5 @@ public class CompanyRestController {
     return companyMapper.companyToDto(company);
   }
 
-  private void validateFields(Object o, String message) {
-    if (o instanceof String) {
-      if (((String) o).isEmpty()) {
-        throw new IllegalArgumentException(message);
-      }
-    }
-    if (o == null) {
-      throw new IllegalArgumentException(message);
-    }
-  }
+
 }

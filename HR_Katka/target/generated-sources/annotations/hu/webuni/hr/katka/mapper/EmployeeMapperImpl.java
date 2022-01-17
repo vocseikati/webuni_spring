@@ -1,6 +1,8 @@
 package hu.webuni.hr.katka.mapper;
 
+import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
+import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.Employee;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-01-16T08:54:18+0100",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.13 (Eclipse Adoptium)"
+    date = "2022-01-17T14:17:05+0100",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.9.1 (JetBrains s.r.o.)"
 )
 @Component
 public class EmployeeMapperImpl implements EmployeeMapper {
@@ -51,11 +53,12 @@ public class EmployeeMapperImpl implements EmployeeMapper {
 
         EmployeeDto employeeDto = new EmployeeDto();
 
+        employeeDto.setEntryDate( employee.getStartOfWork() );
+        employeeDto.setTitle( employee.getPosition() );
         employeeDto.setId( employee.getId() );
         employeeDto.setName( employee.getName() );
-        employeeDto.setPosition( employee.getPosition() );
         employeeDto.setSalary( employee.getSalary() );
-        employeeDto.setStartOfWork( employee.getStartOfWork() );
+        employeeDto.setCompany( companyToCompanyDto( employee.getCompany() ) );
 
         return employeeDto;
     }
@@ -68,14 +71,46 @@ public class EmployeeMapperImpl implements EmployeeMapper {
 
         Employee employee = new Employee();
 
+        employee.setStartOfWork( employeeDto.getEntryDate() );
+        employee.setPosition( employeeDto.getTitle() );
         employee.setId( employeeDto.getId() );
         employee.setName( employeeDto.getName() );
-        employee.setPosition( employeeDto.getPosition() );
         if ( employeeDto.getSalary() != null ) {
             employee.setSalary( employeeDto.getSalary() );
         }
-        employee.setStartOfWork( employeeDto.getStartOfWork() );
+        employee.setCompany( companyDtoToCompany( employeeDto.getCompany() ) );
 
         return employee;
+    }
+
+    protected CompanyDto companyToCompanyDto(Company company) {
+        if ( company == null ) {
+            return null;
+        }
+
+        CompanyDto companyDto = new CompanyDto();
+
+        companyDto.setId( company.getId() );
+        companyDto.setRegistrationNumber( company.getRegistrationNumber() );
+        companyDto.setName( company.getName() );
+        companyDto.setAddress( company.getAddress() );
+
+        return companyDto;
+    }
+
+    protected Company companyDtoToCompany(CompanyDto companyDto) {
+        if ( companyDto == null ) {
+            return null;
+        }
+
+        Company company = new Company();
+
+        company.setId( companyDto.getId() );
+        company.setRegistrationNumber( companyDto.getRegistrationNumber() );
+        company.setName( companyDto.getName() );
+        company.setAddress( companyDto.getAddress() );
+        company.setEmployeesOfCompany( dtosToEmployees( companyDto.getEmployeesOfCompany() ) );
+
+        return company;
     }
 }

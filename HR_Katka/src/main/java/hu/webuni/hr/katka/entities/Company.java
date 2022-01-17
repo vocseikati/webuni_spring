@@ -1,5 +1,6 @@
 package hu.webuni.hr.katka.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ import javax.persistence.Table;
 public class Company {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue
   private Long id;
   private String registrationNumber;
   private String name;
@@ -73,5 +74,13 @@ public class Company {
 
   public void setEmployeesOfCompany(List<Employee> employeesOfCompany) {
     this.employeesOfCompany = employeesOfCompany;
+  }
+
+  public void addEmployee(Employee employee){
+    if (employeesOfCompany == null){
+      this.employeesOfCompany = new ArrayList<>();
+    }
+    this.employeesOfCompany.add(employee);
+    employee.setCompany(this);
   }
 }

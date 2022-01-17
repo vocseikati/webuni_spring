@@ -7,18 +7,14 @@ import javax.validation.constraints.NotEmpty;
 
 public class CompanyDto {
 
-  @JsonView(Views.Public.class)
   private Long id;
-  @JsonView(Views.Public.class)
   @NotEmpty(message = "Registration number must have a value.")
   private String registrationNumber;
-  @JsonView(Views.Public.class)
   @NotEmpty(message = "Name must have a value.")
   private String name;
-  @JsonView(Views.Public.class)
   @NotEmpty(message = "Address must have a value.")
   private String address;
-  @JsonView(Views.Internal.class)
+
   private List<EmployeeDto> employeesOfCompany = new ArrayList<>();
 
   public CompanyDto() {

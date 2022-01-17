@@ -44,9 +44,6 @@ public class EmployeeRestController {
 
   @PostMapping
   public EmployeeDto addNewEmployee(@RequestBody @Valid EmployeeDto employee) {
-    validateFields(employee, "Employee cannot be null."); //todo: nem jelenik meg az üzenet miért?
-    List<Employee> employees = employeeService.findAll();
-    employee.setId((long) (employees.size() + 1));
     Employee savedEmployee = employeeService.save(employeeMapper.dtoToEmployee(employee));
     return employeeMapper.employeeToDto(savedEmployee);
   }
@@ -54,8 +51,6 @@ public class EmployeeRestController {
   @PutMapping("/{id}")
   public EmployeeDto modifyEmployeeById(@PathVariable Long id,
                                         @RequestBody EmployeeDto employee) {
-    validateFields(employee, "Employee cannot be null.");
-    validateFields(id, "Id cannot be null!");
     Employee modifiedEmployee =
         employeeService.modifyEmployee(id, employeeMapper.dtoToEmployee(employee));
     return employeeMapper.employeeToDto(modifiedEmployee);
@@ -63,7 +58,6 @@ public class EmployeeRestController {
 
   @DeleteMapping("{id}")
   public void deleteEmployeeById(@PathVariable Long id) {
-    validateFields(id, "Id cannot be null!");
     employeeService.delete(id);
   }
 
@@ -102,16 +96,7 @@ public class EmployeeRestController {
     return employeeMapper.employeesToDtos(employees);
   }
 
-  private void validateFields(Object o, String message) {
-    if (o instanceof String) {
-      if (((String) o).isEmpty()) {
-        throw new IllegalArgumentException(message);
-      }
-    }
-    if (o == null) {
-      throw new IllegalArgumentException(message);
-    }
-  }
+
 
 
 }

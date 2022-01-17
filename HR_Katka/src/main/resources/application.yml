@@ -6,9 +6,9 @@ spring:
     format:
       date-time: yyyy-MM-dd HH:mm:ss
   jpa:
-    hibernate:
-      ddl-auto: update
     show-sql: true
+    hibernate:
+      ddl-auto: create-drop
   datasource:
     url: jdbc:postgresql://localhost:5432/hr
     username: postgres

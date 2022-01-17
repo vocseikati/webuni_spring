@@ -43,7 +43,7 @@ public class EmployeeController {
     try {
       checkFields(employee);
       employee.setId((long) employees.size() + 1);
-      employee.setStartOfWork(LocalDateTime.now());
+      employee.setEntryDate(LocalDateTime.now());
       employees.add(employee);
     } catch (IllegalArgumentException ex) {
       return "redirect:/employees?error=" + ex.getMessage();
@@ -66,9 +66,9 @@ public class EmployeeController {
     for (EmployeeDto employeeDto : employees) {
       if (employeeDto.getId().equals(employee.getId())) {
         employeeDto.setName(employee.getName());
-        employeeDto.setPosition(employee.getPosition());
+        employeeDto.setTitle(employee.getTitle());
         employeeDto.setSalary(employee.getSalary());
-        employeeDto.setStartOfWork(employee.getStartOfWork());
+        employeeDto.setEntryDate(employee.getEntryDate());
       }
     }
     return "redirect:/employees";
@@ -87,7 +87,7 @@ public class EmployeeController {
     if (employee.getName() == null || employee.getName().isEmpty()) {
       throw new IllegalArgumentException("Name must not be null!");
     }
-    if (employee.getPosition() == null || employee.getPosition().isEmpty()) {
+    if (employee.getTitle() == null || employee.getTitle().isEmpty()) {
       throw new IllegalArgumentException("Position must not be null!");
     }
     if (employee.getSalary() <= 0) {

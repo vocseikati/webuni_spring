@@ -20,31 +20,6 @@ public class CompanyService {
   @Autowired
   EmployeeRepository employeeRepository;
 
-//  private Map<Long, Company> companies = new HashMap<>();
-//
-//  private List<Employee> employeeList1 = new ArrayList<>();
-//
-//  {
-//    employeeList1.add(new Employee(1L, "Kata", "leader", 100000,
-//        LocalDateTime.of(2011, 9, 1, 8, 0, 0)));
-//    employeeList1.add(new Employee(2L, "Laca", "referent", 90000,
-//        LocalDateTime.of(2016, 9, 1, 8, 0, 0)));
-//  }
-//
-//  private List<Employee> employeeList2 = new ArrayList<>();
-//
-//  {
-//    employeeList2.add(new Employee(1L, "Test1", "test1", 1111,
-//        LocalDateTime.of(2010, 9, 1, 10, 0, 0)));
-//    employeeList2.add(new Employee(2L, "Test2", "test2", 9999,
-//        LocalDateTime.of(2021, 9, 1, 8, 0, 0)));
-//  }
-//
-//  {
-//    companies.put(1L, new Company(1L, "123ad", "BGE", "Markó utca", employeeList1));
-//    companies.put(2L, new Company(2L, "456re", "ÓE", "Bécsi út", employeeList2));
-//  }
-
   public List<Company> findAll() {
     return companyRepository.findAll();
   }
@@ -54,15 +29,19 @@ public class CompanyService {
   }
 
   public Company save(Company company) {
+    validateFields(company, "Company cannot be null.");
     return companyRepository.save(company);
   }
 
   public void delete(Long id) {
+    validateFields(id, "Id cannot be null!");
     Company company = getCompanyOrThrow(id);
     companyRepository.delete(company);
   }
 
   public Company modifyCompany(Long id, Company company) {
+    validateFields(company, "Company cannot be null.");
+    validateFields(id, "Id cannot be null!");
     Company originalCompany = getCompanyOrThrow(id);
 
     if (company.getRegistrationNumber() != null) {
@@ -81,14 +60,17 @@ public class CompanyService {
   }
 
   public Company addNewEmployeeToCompany(Long id, Employee newEmployee) {
+    validateFields(id, "Id cannot be null.");
+    validateFields(newEmployee, "Employee cannot be null.");
     Company company = getCompanyOrThrow(id);
-    List<Employee> employeeList = company.getEmployeesOfCompany();
-    employeeList.add(newEmployee);
+    company.addEmployee(newEmployee);
     employeeRepository.save(newEmployee);
     return company;
   }
 
   public Company deleteEmployeeFromCompany(Long id, Long employeeId) {
+    validateFields(id, "Company Id cannot be null.");
+    validateFields(employeeId, "Employee Id cannot be null.");
     Company company = getCompanyOrThrow(id);
     Employee employeeToRemove = getEmployeeOrThrow(employeeId);
 
@@ -97,20 +79,29 @@ public class CompanyService {
       throw new IllegalArgumentException(
           "This employee does not participate in the given company.");
     }
+    employeeToRemove.setCompany(null);
     employeeList.remove(employeeToRemove);
+    employeeRepository.save(employeeToRemove);
     return company;
   }
 
   public Company modifyAllEmployeesFromCompany(Long id, List<Employee> newEmployees) {
+    validateFields(id, "Id cannot be null.");
+    validateFields(newEmployees, "List of employees cannot be null.");
     Company company = getCompanyOrThrow(id);
-    company.setEmployeesOfCompany(newEmployees);
+    company.getEmployeesOfCompany().forEach(e -> e.setCompany(null));
+    company.getEmployeesOfCompany().clear();
+    for (Employee employee : newEmployees) {
+      company.addEmployee(employee);
+      employeeRepository.save(employee);
+    }
     return company;
   }
 
   private Company getCompanyOrThrow(Long id) {
     Optional<Company> companyById = companyRepository.findById(id);
     if (companyById.isEmpty()) {
-      throw new NotFoundException("There is no employee with the provided id.");
+      throw new NotFoundException("There is no company with the provided id.");
     }
     return companyById.get();
   }
@@ -121,5 +112,16 @@ public class CompanyService {
       throw new NotFoundException("There is no employee with the provided id.");
     }
     return employeeById.get();
+  }
+
+  private void validateFields(Object o, String message) {
+    if (o instanceof String) {
+      if (((String) o).isEmpty()) {
+        throw new IllegalArgumentException(message);
+      }
+    }
+    if (o == null) {
+      throw new IllegalArgumentException(message);
+    }
   }
 }

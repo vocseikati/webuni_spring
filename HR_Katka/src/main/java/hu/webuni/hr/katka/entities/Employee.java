@@ -1,10 +1,14 @@
 package hu.webuni.hr.katka.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -13,11 +17,12 @@ import javax.persistence.Table;
 public class Employee {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue
   private Long id;
   private String name;
   private String position;
   private int salary;
+  @Column(name = "entry_date")
   private LocalDateTime startOfWork;
 
   @ManyToOne
@@ -26,7 +31,8 @@ public class Employee {
   public Employee() {
   }
 
-  public Employee(Long id, String name, String position, int salary, LocalDateTime startOfWork) {
+  public Employee(Long id, String name, String position, int salary,
+                  LocalDateTime startOfWork) {
     this.id = id;
     this.name = name;
     this.position = position;
@@ -72,5 +78,13 @@ public class Employee {
 
   public void setStartOfWork(LocalDateTime startOfWork) {
     this.startOfWork = startOfWork;
+  }
+
+  public Company getCompany() {
+    return company;
+  }
+
+  public void setCompany(Company company) {
+    this.company = company;
   }
 }

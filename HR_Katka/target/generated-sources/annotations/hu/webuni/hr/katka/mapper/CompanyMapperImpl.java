@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-01-16T08:54:18+0100",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.13 (Eclipse Adoptium)"
+    date = "2022-01-17T14:39:56+0100",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.9.1 (JetBrains s.r.o.)"
 )
 @Component
 public class CompanyMapperImpl implements CompanyMapper {
@@ -32,6 +32,20 @@ public class CompanyMapperImpl implements CompanyMapper {
     }
 
     @Override
+    public List<CompanyDto> companiesToSummaryDtos(List<Company> companies) {
+        if ( companies == null ) {
+            return null;
+        }
+
+        List<CompanyDto> list = new ArrayList<CompanyDto>( companies.size() );
+        for ( Company company : companies ) {
+            list.add( companyToSummaryDto( company ) );
+        }
+
+        return list;
+    }
+
+    @Override
     public CompanyDto companyToDto(Company company) {
         if ( company == null ) {
             return null;
@@ -40,6 +54,22 @@ public class CompanyMapperImpl implements CompanyMapper {
         CompanyDto companyDto = new CompanyDto();
 
         companyDto.setEmployeesOfCompany( employeeListToEmployeeDtoList( company.getEmployeesOfCompany() ) );
+        companyDto.setId( company.getId() );
+        companyDto.setRegistrationNumber( company.getRegistrationNumber() );
+        companyDto.setName( company.getName() );
+        companyDto.setAddress( company.getAddress() );
+
+        return companyDto;
+    }
+
+    @Override
+    public CompanyDto companyToSummaryDto(Company company) {
+        if ( company == null ) {
+            return null;
+        }
+
+        CompanyDto companyDto = new CompanyDto();
+
         companyDto.setId( company.getId() );
         companyDto.setRegistrationNumber( company.getRegistrationNumber() );
         companyDto.setName( company.getName() );
@@ -65,20 +95,41 @@ public class CompanyMapperImpl implements CompanyMapper {
         return company;
     }
 
-    protected EmployeeDto employeeToEmployeeDto(Employee employee) {
+    @Override
+    public EmployeeDto employeeToDto(Employee employee) {
         if ( employee == null ) {
             return null;
         }
 
         EmployeeDto employeeDto = new EmployeeDto();
 
+        employeeDto.setEntryDate( employee.getStartOfWork() );
+        employeeDto.setTitle( employee.getPosition() );
         employeeDto.setId( employee.getId() );
         employeeDto.setName( employee.getName() );
-        employeeDto.setPosition( employee.getPosition() );
         employeeDto.setSalary( employee.getSalary() );
-        employeeDto.setStartOfWork( employee.getStartOfWork() );
 
         return employeeDto;
+    }
+
+    @Override
+    public Employee dtoToEmployee(EmployeeDto employeeDto) {
+        if ( employeeDto == null ) {
+            return null;
+        }
+
+        Employee employee = new Employee();
+
+        employee.setStartOfWork( employeeDto.getEntryDate() );
+        employee.setPosition( employeeDto.getTitle() );
+        employee.setId( employeeDto.getId() );
+        employee.setName( employeeDto.getName() );
+        if ( employeeDto.getSalary() != null ) {
+            employee.setSalary( employeeDto.getSalary() );
+        }
+        employee.setCompany( dtoToCompany( employeeDto.getCompany() ) );
+
+        return employee;
     }
 
     protected List<EmployeeDto> employeeListToEmployeeDtoList(List<Employee> list) {
@@ -88,28 +139,10 @@ public class CompanyMapperImpl implements CompanyMapper {
 
         List<EmployeeDto> list1 = new ArrayList<EmployeeDto>( list.size() );
         for ( Employee employee : list ) {
-            list1.add( employeeToEmployeeDto( employee ) );
+            list1.add( employeeToDto( employee ) );
         }
 
         return list1;
-    }
-
-    protected Employee employeeDtoToEmployee(EmployeeDto employeeDto) {
-        if ( employeeDto == null ) {
-            return null;
-        }
-
-        Employee employee = new Employee();
-
-        employee.setId( employeeDto.getId() );
-        employee.setName( employeeDto.getName() );
-        employee.setPosition( employeeDto.getPosition() );
-        if ( employeeDto.getSalary() != null ) {
-            employee.setSalary( employeeDto.getSalary() );
-        }
-        employee.setStartOfWork( employeeDto.getStartOfWork() );
-
-        return employee;
     }
 
     protected List<Employee> employeeDtoListToEmployeeList(List<EmployeeDto> list) {
@@ -119,7 +152,7 @@ public class CompanyMapperImpl implements CompanyMapper {
 
         List<Employee> list1 = new ArrayList<Employee>( list.size() );
         for ( EmployeeDto employeeDto : list ) {
-            list1.add( employeeDtoToEmployee( employeeDto ) );
+            list1.add( dtoToEmployee( employeeDto ) );
         }
 
         return list1;
