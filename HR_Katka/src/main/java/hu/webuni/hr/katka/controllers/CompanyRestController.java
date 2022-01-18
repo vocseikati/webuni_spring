@@ -126,5 +126,11 @@ public class CompanyRestController {
     return companyMapper.companyToDto(company);
   }
 
+  @GetMapping("/employeesOverSalaryLimit")
+  public List<CompanyDto> getCompaniesWithEmployeesOverLimit(@RequestParam Integer limit) {
+    List<Company> companies =
+        companyService.getCompaniesWithEmployeesOverLimit(limit);
+    return companyMapper.companiesToSummaryDtos(companies);
+  }
 
 }

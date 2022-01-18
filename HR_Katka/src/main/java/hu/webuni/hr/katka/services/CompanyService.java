@@ -6,8 +6,10 @@ import hu.webuni.hr.katka.entities.Employee;
 import hu.webuni.hr.katka.repositories.CompanyRepository;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -96,6 +98,14 @@ public class CompanyService {
       employeeRepository.save(employee);
     }
     return company;
+  }
+
+  public List<Company> getCompaniesWithEmployeesOverLimit(Integer limit){
+    List<Company> companies;
+    List<Long> companyIds =
+        employeeRepository.findCompanyIdsByEmployeeSalaryGraterThan(limit);
+    companies = companyIds.stream().map(this::findById).collect(Collectors.toList());
+    return companies;
   }
 
   private Company getCompanyOrThrow(Long id) {
