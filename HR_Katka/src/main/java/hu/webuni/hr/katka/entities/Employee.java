@@ -31,9 +31,8 @@ public class Employee {
   public Employee() {
   }
 
-  public Employee(Long id, String name, String position, int salary,
+  public Employee(String name, String position, int salary,
                   LocalDateTime startOfWork) {
-    this.id = id;
     this.name = name;
     this.position = position;
     this.salary = salary;

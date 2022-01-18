@@ -27,13 +27,10 @@ public class Company {
   public Company() {
   }
 
-  public Company(Long id, String registrationNumber, String name, String address,
-                 List<Employee> employeesOfCompany) {
-    this.id = id;
+  public Company(String registrationNumber, String name, String address) {
     this.registrationNumber = registrationNumber;
     this.name = name;
     this.address = address;
-    this.employeesOfCompany = employeesOfCompany;
   }
 
   public Long getId() {
