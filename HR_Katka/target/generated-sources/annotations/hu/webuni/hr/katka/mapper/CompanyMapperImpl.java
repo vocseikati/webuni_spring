@@ -3,6 +3,7 @@ package hu.webuni.hr.katka.mapper;
 import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.CompanyTypeDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
+import hu.webuni.hr.katka.entities.BusinessType;
 import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.CompanyType;
 import hu.webuni.hr.katka.entities.Employee;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-01-19T13:15:55+0100",
+    date = "2022-01-19T14:03:39+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.9.1 (JetBrains s.r.o.)"
 )
 @Component
@@ -158,7 +159,9 @@ public class CompanyMapperImpl implements CompanyMapper {
         CompanyTypeDto companyTypeDto = new CompanyTypeDto();
 
         companyTypeDto.setId( companyType.getId() );
-        companyTypeDto.setName( companyType.getName() );
+        if ( companyType.getName() != null ) {
+            companyTypeDto.setName( companyType.getName().name() );
+        }
 
         return companyTypeDto;
     }
@@ -184,7 +187,9 @@ public class CompanyMapperImpl implements CompanyMapper {
         CompanyType companyType = new CompanyType();
 
         companyType.setId( companyTypeDto.getId() );
-        companyType.setName( companyTypeDto.getName() );
+        if ( companyTypeDto.getName() != null ) {
+            companyType.setName( Enum.valueOf( BusinessType.class, companyTypeDto.getName() ) );
+        }
 
         return companyType;
     }

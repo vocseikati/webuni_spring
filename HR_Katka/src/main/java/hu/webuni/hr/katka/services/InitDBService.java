@@ -1,5 +1,6 @@
 package hu.webuni.hr.katka.services;
 
+import hu.webuni.hr.katka.entities.BusinessType;
 import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.CompanyType;
 import hu.webuni.hr.katka.entities.Employee;
@@ -62,17 +63,19 @@ public class InitDBService {
     testCompany3.addEmployee(testEmployee5);
     testCompany3.addEmployee(testEmployee6);
 
-    CompanyType companyType1 = new CompanyType("Nyrt.");
-    CompanyType companyType2 = new CompanyType("Kft.");
-    CompanyType companyType3 = new CompanyType("Zrt.");
+    CompanyType companyType1 = new CompanyType(BusinessType.NYRT);
+    CompanyType companyType2 = new CompanyType(BusinessType.KFT);
+    CompanyType companyType3 = new CompanyType(BusinessType.ZRT);
 
-    companyTypeRepository.saveAll(Arrays.asList(companyType1,companyType2,companyType3));
+    companyTypeRepository.saveAll(Arrays.asList(companyType1, companyType2, companyType3));
 
     testCompany1.setCompanyType(companyType1);
     testCompany2.setCompanyType(companyType2);
     testCompany3.setCompanyType(companyType3);
 
-    companyRepository.saveAll(Arrays.asList(testCompany1, testCompany2));
-    employeeRepository.saveAll(Arrays.asList(testEmployee1, testEmployee2, testEmployee3));
+    companyRepository.saveAll(Arrays.asList(testCompany1, testCompany2, testCompany3));
+    employeeRepository.saveAll(Arrays
+        .asList(testEmployee1, testEmployee2, testEmployee3, testEmployee4, testEmployee5,
+            testEmployee6));
   }
 }
