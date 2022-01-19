@@ -17,7 +17,7 @@ public interface EmployeeService {
 
   void delete(Long id);
 
-  Employee modifyEmployee(Long id, Employee employee);
+  Employee modifyEmployee(Employee employee);
 
   List<Employee> getEmployeesOverLimit(Integer limit);
 

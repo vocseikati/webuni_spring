@@ -26,7 +26,7 @@ class EmployeeRestControllerIT {
     List<EmployeeDto> employeesBefore = getAllEmployees();
 
     EmployeeDto newEmployee =
-        new EmployeeDto(1L, "Test1", "Test title1", 100,
+        new EmployeeDto(0L, "Test1", "Test title1", 100,
             LocalDateTime.of(2019, 1, 1, 8, 0, 0));
     saveEmployee(newEmployee)
         .expectStatus()
@@ -45,7 +45,7 @@ class EmployeeRestControllerIT {
   public void saveEmployee_WithInvalidTitle_ThrowException() {
     List<EmployeeDto> employeesBefore = getAllEmployees();
     EmployeeDto invalidEmployee =
-        new EmployeeDto(1L, "Test1", "", 100,
+        new EmployeeDto(0L, "Test1", "", 100,
             LocalDateTime.of(2019, 1, 1, 8, 0, 0));
 
     saveEmployee(invalidEmployee)
@@ -62,7 +62,7 @@ class EmployeeRestControllerIT {
   public void saveEmployee_WithInvalidSalary_ThrowException() {
     List<EmployeeDto> employeesBefore = getAllEmployees();
     EmployeeDto invalidEmployee =
-        new EmployeeDto(1L, "Test", "test", -100,
+        new EmployeeDto(0L, "Test", "test", -100,
             LocalDateTime.of(2019, 1, 1, 8, 0, 0));
 
     saveEmployee(invalidEmployee)
@@ -78,8 +78,9 @@ class EmployeeRestControllerIT {
   @Test
   public void updateEmployee_WorksCorrectly() {
     EmployeeDto employee =
-        new EmployeeDto(1L, "Test1", "Test title1", 100,
+        new EmployeeDto(0L, "Test1", "Test title1", 100,
             LocalDateTime.of(2019, 1, 1, 8, 0, 0));
+
     EmployeeDto savedEmployee = saveEmployee(employee)
         .expectStatus()
         .isOk()
@@ -90,9 +91,10 @@ class EmployeeRestControllerIT {
 
     savedEmployee.setName("Put");
 
-    saveEmployee(savedEmployee).expectStatus().isOk();
-//    modifyEmployee(savedEmployee).expectStatus().isOk();
+    modifyEmployee(savedEmployee).expectStatus().isOk();
+
     List<EmployeeDto> employeesAfter = getAllEmployees();
+
     assertThat(employeesAfter.size()).isEqualTo(employeesBefore.size());
     assertThat(employeesAfter.get(employeesAfter.size()-1))
         .usingRecursiveComparison()

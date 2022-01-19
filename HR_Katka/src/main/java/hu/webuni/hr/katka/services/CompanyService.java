@@ -41,24 +41,12 @@ public class CompanyService {
     companyRepository.delete(company);
   }
 
-  public Company modifyCompany(Long id, Company company) {
+  public Company modifyCompany(Company company) {
     validateFields(company, "Company cannot be null.");
-    validateFields(id, "Id cannot be null!");
-    Company originalCompany = getCompanyOrThrow(id);
+    validateFields(company.getId(), "Company Id cannot be null.");
+    getCompanyOrThrow(company.getId());
 
-    if (company.getRegistrationNumber() != null) {
-      originalCompany.setRegistrationNumber(company.getRegistrationNumber());
-    }
-    if (company.getName() != null) {
-      originalCompany.setName(company.getName());
-    }
-    if (company.getAddress() != null) {
-      originalCompany.setAddress(company.getAddress());
-    }
-    if (!company.getEmployeesOfCompany().isEmpty()) {
-      originalCompany.setEmployeesOfCompany(company.getEmployeesOfCompany());
-    }
-    return originalCompany;
+    return companyRepository.save(company);
   }
 
   public Company addNewEmployeeToCompany(Long id, Employee newEmployee) {
@@ -100,13 +88,17 @@ public class CompanyService {
     return company;
   }
 
-  public List<Company> getCompaniesWithEmployeesOverLimit(Integer limit){
+  public List<Company> getCompaniesWithEmployeesOverLimit(Integer limit) {
     List<Company> companies;
     List<Long> companyIds =
         employeeRepository.findCompanyIdsByEmployeeSalaryGraterThan(limit);
     companies = companyIds.stream().map(this::findById).collect(Collectors.toList());
     return companies;
   }
+
+//  public List<Company> getCompaniesOverEmployeesNumber(Integer limit) {
+//    return companyRepository.findByEmployeesOfCompanyOverNumber(limit);
+//  }
 
   private Company getCompanyOrThrow(Long id) {
     Optional<Company> companyById = companyRepository.findById(id);

@@ -35,22 +35,10 @@ public abstract class CRUDEmployeeService implements EmployeeService {
     employeeRepository.delete(getEmployeeOrThrow(id));
   }
 
-  public Employee modifyEmployee(Long id, Employee employee) {
+  public Employee modifyEmployee(Employee employee) {
     validateFields(employee, "Employee cannot be null."); //todo: ellenőrizni a hibaüzenetet
-    validateFields(id, "Id cannot be null!");
-    Employee originalEmployee = getEmployeeOrThrow(id);
-
-    if (employee.getName() != null) {
-      originalEmployee.setName(employee.getName());
-    }
-    if (employee.getPosition() != null) {
-      originalEmployee.setPosition(employee.getPosition());
-    }
-    if (employee.getStartOfWork() != null) {
-      originalEmployee.setStartOfWork(employee.getStartOfWork());
-    }
-    originalEmployee.setSalary(employee.getSalary());
-    return originalEmployee;
+    validateFields(employee.getId(), "Id cannot be null!");
+    return employeeRepository.save(employee);
   }
 
   public List<Employee> getEmployeesOverLimit(Integer limit) {

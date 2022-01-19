@@ -101,8 +101,9 @@ public class CompanyRestController {
   @PutMapping("{id}")
   public CompanyDto modifyCompany(@PathVariable Long id,
                                   @RequestBody CompanyDto companyDto) {
+    companyDto.setId(id);
     Company modifiedCompany =
-        companyService.modifyCompany(id, companyMapper.dtoToCompany(companyDto));
+        companyService.modifyCompany(companyMapper.dtoToCompany(companyDto));
     return companyMapper.companyToDto(modifiedCompany);
   }
 
@@ -127,10 +128,16 @@ public class CompanyRestController {
   }
 
   @GetMapping("/employeesOverSalaryLimit")
-  public List<CompanyDto> getCompaniesWithEmployeesOverLimit(@RequestParam Integer limit) {
+  public List<CompanyDto> getCompaniesWithEmployeesOverSalaryLimit(@RequestParam Integer limit) {
     List<Company> companies =
         companyService.getCompaniesWithEmployeesOverLimit(limit);
     return companyMapper.companiesToSummaryDtos(companies);
   }
 
+//  @GetMapping("/employeesOverManpower")
+//  public List<CompanyDto> getCompaniesOverNumberOfEmployees(@RequestParam Integer limit) {
+//    List<Company> companies =
+//        companyService.getCompaniesOverEmployeesNumber(limit);
+//    return companyMapper.companiesToSummaryDtos(companies);
+//  }
 }
