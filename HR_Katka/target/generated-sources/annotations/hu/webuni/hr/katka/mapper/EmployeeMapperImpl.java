@@ -1,8 +1,10 @@
 package hu.webuni.hr.katka.mapper;
 
 import hu.webuni.hr.katka.dtos.CompanyDto;
+import hu.webuni.hr.katka.dtos.CompanyTypeDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.entities.Company;
+import hu.webuni.hr.katka.entities.CompanyType;
 import hu.webuni.hr.katka.entities.Employee;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-01-18T23:39:20+0100",
+    date = "2022-01-19T13:15:55+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.9.1 (JetBrains s.r.o.)"
 )
 @Component
@@ -83,6 +85,19 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         return employee;
     }
 
+    protected CompanyTypeDto companyTypeToCompanyTypeDto(CompanyType companyType) {
+        if ( companyType == null ) {
+            return null;
+        }
+
+        CompanyTypeDto companyTypeDto = new CompanyTypeDto();
+
+        companyTypeDto.setId( companyType.getId() );
+        companyTypeDto.setName( companyType.getName() );
+
+        return companyTypeDto;
+    }
+
     protected CompanyDto companyToCompanyDto(Company company) {
         if ( company == null ) {
             return null;
@@ -94,8 +109,22 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         companyDto.setRegistrationNumber( company.getRegistrationNumber() );
         companyDto.setName( company.getName() );
         companyDto.setAddress( company.getAddress() );
+        companyDto.setCompanyType( companyTypeToCompanyTypeDto( company.getCompanyType() ) );
 
         return companyDto;
+    }
+
+    protected CompanyType companyTypeDtoToCompanyType(CompanyTypeDto companyTypeDto) {
+        if ( companyTypeDto == null ) {
+            return null;
+        }
+
+        CompanyType companyType = new CompanyType();
+
+        companyType.setId( companyTypeDto.getId() );
+        companyType.setName( companyTypeDto.getName() );
+
+        return companyType;
     }
 
     protected Company companyDtoToCompany(CompanyDto companyDto) {
@@ -110,6 +139,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         company.setName( companyDto.getName() );
         company.setAddress( companyDto.getAddress() );
         company.setEmployeesOfCompany( dtosToEmployees( companyDto.getEmployeesOfCompany() ) );
+        company.setCompanyType( companyTypeDtoToCompanyType( companyDto.getCompanyType() ) );
 
         return company;
     }

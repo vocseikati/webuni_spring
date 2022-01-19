@@ -17,24 +17,26 @@ public class CompanyDto {
 
   private List<EmployeeDto> employeesOfCompany = new ArrayList<>();
 
+  private CompanyTypeDto companyType;
+
   public CompanyDto() {
   }
 
-  public CompanyDto(Long id, String registrationNumber, String name, String address,
-                    List<EmployeeDto> employeesOfCompany) {
-    this.id = id;
-    this.registrationNumber = registrationNumber;
-    this.name = name;
-    this.address = address;
-    this.employeesOfCompany = employeesOfCompany;
-  }
-
-  public CompanyDto(Long id, String registrationNumber, String name, String address) {
-    this.id = id;
-    this.registrationNumber = registrationNumber;
-    this.name = name;
-    this.address = address;
-  }
+//  public CompanyDto(Long id, String registrationNumber, String name, String address,
+//                    List<EmployeeDto> employeesOfCompany) {
+//    this.id = id;
+//    this.registrationNumber = registrationNumber;
+//    this.name = name;
+//    this.address = address;
+//    this.employeesOfCompany = employeesOfCompany;
+//  }
+//
+//  public CompanyDto(Long id, String registrationNumber, String name, String address) {
+//    this.id = id;
+//    this.registrationNumber = registrationNumber;
+//    this.name = name;
+//    this.address = address;
+//  }
 
   public Long getId() {
     return id;
@@ -74,5 +76,13 @@ public class CompanyDto {
 
   public void setAddress(String address) {
     this.address = address;
+  }
+
+  public CompanyTypeDto getCompanyType() {
+    return companyType;
+  }
+
+  public void setCompanyType(CompanyTypeDto companyType) {
+    this.companyType = companyType;
   }
 }

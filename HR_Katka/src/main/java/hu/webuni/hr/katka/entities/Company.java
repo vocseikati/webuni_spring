@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,6 +24,9 @@ public class Company {
 
   @OneToMany(mappedBy = "company")
   private List<Employee> employeesOfCompany = new ArrayList<>();
+
+  @ManyToOne
+  private CompanyType companyType;
 
   public Company() {
   }
@@ -71,6 +75,14 @@ public class Company {
 
   public void setEmployeesOfCompany(List<Employee> employeesOfCompany) {
     this.employeesOfCompany = employeesOfCompany;
+  }
+
+  public CompanyType getCompanyType() {
+    return companyType;
+  }
+
+  public void setCompanyType(CompanyType companyType) {
+    this.companyType = companyType;
   }
 
   public void addEmployee(Employee employee){
