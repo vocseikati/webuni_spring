@@ -1,5 +1,6 @@
 package hu.webuni.hr.katka.services;
 
+import hu.webuni.hr.katka.entities.AverageSalaryByPosition;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.Employee;
@@ -89,16 +90,16 @@ public class CompanyService {
   }
 
   public List<Company> getCompaniesWithEmployeesOverLimit(Integer limit) {
-    List<Company> companies;
-    List<Long> companyIds =
-        employeeRepository.findCompanyIdsByEmployeeSalaryGraterThan(limit);
-    companies = companyIds.stream().map(this::findById).collect(Collectors.toList());
-    return companies;
+    return companyRepository.findByEmployeeWithSalaryHigherThan(limit);
   }
 
-//  public List<Company> getCompaniesOverEmployeesNumber(Integer limit) {
-//    return companyRepository.findByEmployeesOfCompanyOverNumber(limit);
-//  }
+  public List<Company> getCompaniesOverEmployeesNumber(Integer limit) {
+    return companyRepository.findByEmployeeCountHigherThan(limit);
+  }
+
+  public List<AverageSalaryByPosition> getSalaryStats(Long companyid){
+    return companyRepository.findAverageSalariesByPosition(companyid);
+  }
 
   private Company getCompanyOrThrow(Long id) {
     Optional<Company> companyById = companyRepository.findById(id);

@@ -63,9 +63,9 @@ public class InitDBService {
     testCompany3.addEmployee(testEmployee5);
     testCompany3.addEmployee(testEmployee6);
 
-    CompanyType companyType1 = new CompanyType(BusinessType.NYRT);
-    CompanyType companyType2 = new CompanyType(BusinessType.KFT);
-    CompanyType companyType3 = new CompanyType(BusinessType.ZRT);
+    CompanyType companyType1 = new CompanyType("Nyrt.");
+    CompanyType companyType2 = new CompanyType("Kft.");
+    CompanyType companyType3 = new CompanyType("Zrt.");
 
     companyTypeRepository.saveAll(Arrays.asList(companyType1, companyType2, companyType3));
 

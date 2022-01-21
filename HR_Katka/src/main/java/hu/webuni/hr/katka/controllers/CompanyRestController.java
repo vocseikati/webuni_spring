@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
 import hu.webuni.hr.katka.dtos.Views;
+import hu.webuni.hr.katka.entities.AverageSalaryByPosition;
 import hu.webuni.hr.katka.mapper.CompanyMapper;
 import hu.webuni.hr.katka.mapper.EmployeeMapper;
 import hu.webuni.hr.katka.entities.Company;
@@ -38,11 +39,7 @@ public class CompanyRestController {
   @GetMapping
   public List<CompanyDto> listAllCompanies(@RequestParam(required = false) Boolean full) {
     List<Company> companies = companyService.findAll();
-    if (full != null && full) {
-      return companyMapper.companiesToDtos(companies);
-    } else {
-      return companyMapper.companiesToSummaryDtos(companies);
-    }
+    return mapCompanies(full, companies);
   }
 
   @GetMapping("{id}")
@@ -56,7 +53,7 @@ public class CompanyRestController {
     }
   }
 
-//  @GetMapping(params = "full=true")
+  //  @GetMapping(params = "full=true")
 //  @JsonView(Views.Internal.class)
 //  public List<CompanyDto> listAllCompaniesFull() {
 //    List<Company> companies = companyService.findAll();
@@ -83,7 +80,6 @@ public class CompanyRestController {
 //    Company companyById = companyService.findById(id);
 //    return companyMapper.companyToDto(companyById);
 //  }
-
   @PostMapping
   public CompanyDto addNewCompany(@RequestBody @Valid CompanyDto company) {
     Company savedCompany = companyService.save(companyMapper.dtoToCompany(company));
@@ -127,17 +123,34 @@ public class CompanyRestController {
     return companyMapper.companyToDto(company);
   }
 
-  @GetMapping("/employeesOverSalaryLimit")
-  public List<CompanyDto> getCompaniesWithEmployeesOverSalaryLimit(@RequestParam Integer limit) {
+  @GetMapping("/employeesAboveSalary")
+  public List<CompanyDto> getCompaniesWithAboveSalary(@RequestParam Integer limit,
+                                                      @RequestParam(required = false)
+                                                          Boolean full) {
     List<Company> companies =
         companyService.getCompaniesWithEmployeesOverLimit(limit);
-    return companyMapper.companiesToSummaryDtos(companies);
+    return mapCompanies(full, companies);
   }
 
-//  @GetMapping("/employeesOverManpower")
-//  public List<CompanyDto> getCompaniesOverNumberOfEmployees(@RequestParam Integer limit) {
-//    List<Company> companies =
-//        companyService.getCompaniesOverEmployeesNumber(limit);
-//    return companyMapper.companiesToSummaryDtos(companies);
-//  }
+  @GetMapping("/employeesAboveNumber")
+  public List<CompanyDto> getCompaniesAboveNumberOfEmployees(@RequestParam Integer limit,
+                                                             @RequestParam(required = false)
+                                                                 Boolean full) {
+    List<Company> companies =
+        companyService.getCompaniesOverEmployeesNumber(limit);
+    return mapCompanies(full, companies);
+  }
+
+  @GetMapping("/{id}/salaryStats")
+  public List<AverageSalaryByPosition> getSalaryStatsById(@PathVariable long id) {
+    return companyService.getSalaryStats(id);
+  }
+
+  private List<CompanyDto> mapCompanies(Boolean full, List<Company> companies) {
+    if (full != null && full) {
+      return companyMapper.companiesToDtos(companies);
+    } else {
+      return companyMapper.companiesToSummaryDtos(companies);
+    }
+  }
 }
