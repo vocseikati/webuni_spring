@@ -50,7 +50,7 @@ public class EmployeeRestController {
 
   @PutMapping("/{id}")
   public EmployeeDto modifyEmployeeById(@PathVariable Long id,
-                                        @RequestBody EmployeeDto employee) {
+                                        @RequestBody @Valid EmployeeDto employee) {
     employee.setId(id);
     Employee modifiedEmployee =
         employeeService.modifyEmployee(employeeMapper.dtoToEmployee(employee));

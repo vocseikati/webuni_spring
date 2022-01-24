@@ -1,11 +1,8 @@
 package hu.webuni.hr.katka.mapper;
 
 import hu.webuni.hr.katka.dtos.CompanyDto;
-import hu.webuni.hr.katka.dtos.CompanyTypeDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
-import hu.webuni.hr.katka.entities.BusinessType;
 import hu.webuni.hr.katka.entities.Company;
-import hu.webuni.hr.katka.entities.CompanyType;
 import hu.webuni.hr.katka.entities.Employee;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-01-19T14:03:39+0100",
+    date = "2022-01-24T23:01:29+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.9.1 (JetBrains s.r.o.)"
 )
 @Component
@@ -86,21 +83,6 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         return employee;
     }
 
-    protected CompanyTypeDto companyTypeToCompanyTypeDto(CompanyType companyType) {
-        if ( companyType == null ) {
-            return null;
-        }
-
-        CompanyTypeDto companyTypeDto = new CompanyTypeDto();
-
-        companyTypeDto.setId( companyType.getId() );
-        if ( companyType.getName() != null ) {
-            companyTypeDto.setName( companyType.getName().name() );
-        }
-
-        return companyTypeDto;
-    }
-
     protected CompanyDto companyToCompanyDto(Company company) {
         if ( company == null ) {
             return null;
@@ -112,24 +94,9 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         companyDto.setRegistrationNumber( company.getRegistrationNumber() );
         companyDto.setName( company.getName() );
         companyDto.setAddress( company.getAddress() );
-        companyDto.setCompanyType( companyTypeToCompanyTypeDto( company.getCompanyType() ) );
+        companyDto.setCompanyType( company.getCompanyType() );
 
         return companyDto;
-    }
-
-    protected CompanyType companyTypeDtoToCompanyType(CompanyTypeDto companyTypeDto) {
-        if ( companyTypeDto == null ) {
-            return null;
-        }
-
-        CompanyType companyType = new CompanyType();
-
-        companyType.setId( companyTypeDto.getId() );
-        if ( companyTypeDto.getName() != null ) {
-            companyType.setName( Enum.valueOf( BusinessType.class, companyTypeDto.getName() ) );
-        }
-
-        return companyType;
     }
 
     protected Company companyDtoToCompany(CompanyDto companyDto) {
@@ -144,7 +111,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         company.setName( companyDto.getName() );
         company.setAddress( companyDto.getAddress() );
         company.setEmployeesOfCompany( dtosToEmployees( companyDto.getEmployeesOfCompany() ) );
-        company.setCompanyType( companyTypeDtoToCompanyType( companyDto.getCompanyType() ) );
+        company.setCompanyType( companyDto.getCompanyType() );
 
         return company;
     }

@@ -53,33 +53,6 @@ public class CompanyRestController {
     }
   }
 
-  //  @GetMapping(params = "full=true")
-//  @JsonView(Views.Internal.class)
-//  public List<CompanyDto> listAllCompaniesFull() {
-//    List<Company> companies = companyService.findAll();
-//    return companyMapper.companiesToDtos(companies);
-//  }
-//
-//  @GetMapping
-//  @JsonView(Views.Public.class)
-//  public List<CompanyDto> listAllCompaniesWithOutEmployees() {
-//    List<Company> companies = companyService.findAll();
-//    return companyMapper.companiesToDtos(companies);
-//  }
-//
-//  @GetMapping("{id}")
-//  @JsonView(Views.Public.class)
-//  public CompanyDto getCompanyByIdWithoutEmployees(@PathVariable Long id) {
-//    Company companyById = companyService.findById(id);
-//    return companyMapper.companyToDto(companyById);
-//  }
-//
-//  @GetMapping(value = "{id}", params = "full=true")
-//  @JsonView(Views.Internal.class)
-//  public CompanyDto getCompanyByIdFull(@PathVariable Long id) {
-//    Company companyById = companyService.findById(id);
-//    return companyMapper.companyToDto(companyById);
-//  }
   @PostMapping
   public CompanyDto addNewCompany(@RequestBody @Valid CompanyDto company) {
     Company savedCompany = companyService.save(companyMapper.dtoToCompany(company));

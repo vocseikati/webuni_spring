@@ -1,6 +1,5 @@
 package hu.webuni.hr.katka.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -23,7 +22,7 @@ public class Company {
   private String address;
 
   @OneToMany(mappedBy = "company")
-  private List<Employee> employeesOfCompany = new ArrayList<>();
+  private List<Employee> employeesOfCompany;
 
   @ManyToOne
   private CompanyType companyType;

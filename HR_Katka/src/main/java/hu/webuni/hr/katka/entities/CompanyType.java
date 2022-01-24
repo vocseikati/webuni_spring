@@ -39,4 +39,6 @@ public class CompanyType {
   public void setName(BusinessType name) {
     this.name = name;
   }
+
+
 }

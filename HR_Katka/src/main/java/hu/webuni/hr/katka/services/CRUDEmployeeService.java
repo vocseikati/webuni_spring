@@ -38,6 +38,10 @@ public abstract class CRUDEmployeeService implements EmployeeService {
   public Employee modifyEmployee(Employee employee) {
     validateFields(employee, "Employee cannot be null."); //todo: ellenőrizni a hibaüzenetet
     validateFields(employee.getId(), "Id cannot be null!");
+    Employee originalEmployee = getEmployeeOrThrow(employee.getId());
+    if (employee.getCompany() == null){
+      employee.setCompany(originalEmployee.getCompany());
+    }
     return employeeRepository.save(employee);
   }
 

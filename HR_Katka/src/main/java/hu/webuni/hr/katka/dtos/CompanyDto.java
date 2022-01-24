@@ -1,6 +1,7 @@
 package hu.webuni.hr.katka.dtos;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import hu.webuni.hr.katka.entities.CompanyType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
@@ -17,26 +18,10 @@ public class CompanyDto {
 
   private List<EmployeeDto> employeesOfCompany = new ArrayList<>();
 
-  private CompanyTypeDto companyType;
+  private CompanyType companyType;
 
   public CompanyDto() {
   }
-
-//  public CompanyDto(Long id, String registrationNumber, String name, String address,
-//                    List<EmployeeDto> employeesOfCompany) {
-//    this.id = id;
-//    this.registrationNumber = registrationNumber;
-//    this.name = name;
-//    this.address = address;
-//    this.employeesOfCompany = employeesOfCompany;
-//  }
-//
-//  public CompanyDto(Long id, String registrationNumber, String name, String address) {
-//    this.id = id;
-//    this.registrationNumber = registrationNumber;
-//    this.name = name;
-//    this.address = address;
-//  }
 
   public Long getId() {
     return id;
@@ -78,11 +63,11 @@ public class CompanyDto {
     this.address = address;
   }
 
-  public CompanyTypeDto getCompanyType() {
+  public CompanyType getCompanyType() {
     return companyType;
   }
 
-  public void setCompanyType(CompanyTypeDto companyType) {
+  public void setCompanyType(CompanyType companyType) {
     this.companyType = companyType;
   }
 }

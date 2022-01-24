@@ -5,6 +5,7 @@ import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.Employee;
 import hu.webuni.hr.katka.repositories.CompanyRepository;
+import hu.webuni.hr.katka.repositories.CompanyTypeRepository;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
 
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ public class CompanyService {
   @Autowired
   EmployeeRepository employeeRepository;
 
+  @Autowired
+  CompanyTypeRepository companyTypeRepository;
+
   public List<Company> findAll() {
     return companyRepository.findAll();
   }
@@ -33,6 +37,9 @@ public class CompanyService {
 
   public Company save(Company company) {
     validateFields(company, "Company cannot be null.");
+    if (company.getCompanyType() != null) {
+      companyTypeRepository.save(company.getCompanyType());
+    }
     return companyRepository.save(company);
   }
 
@@ -97,7 +104,7 @@ public class CompanyService {
     return companyRepository.findByEmployeeCountHigherThan(limit);
   }
 
-  public List<AverageSalaryByPosition> getSalaryStats(Long companyid){
+  public List<AverageSalaryByPosition> getSalaryStats(Long companyid) {
     return companyRepository.findAverageSalariesByPosition(companyid);
   }
 
