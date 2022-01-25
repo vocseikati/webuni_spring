@@ -3,10 +3,13 @@ package hu.webuni.hr.katka.services;
 import hu.webuni.hr.katka.entities.BusinessType;
 import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.CompanyType;
+import hu.webuni.hr.katka.entities.Degree;
 import hu.webuni.hr.katka.entities.Employee;
+import hu.webuni.hr.katka.entities.Position;
 import hu.webuni.hr.katka.repositories.CompanyRepository;
 import hu.webuni.hr.katka.repositories.CompanyTypeRepository;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
+import hu.webuni.hr.katka.repositories.PositionRepository;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,24 +28,32 @@ public class InitDBService {
   @Autowired
   CompanyTypeRepository companyTypeRepository;
 
+  @Autowired
+  PositionRepository positionRepository;
+
   public void clearDB() {
     employeeRepository.deleteAll();
     companyRepository.deleteAll();
   }
 
   public void insertTestData() {
+    Position position1 = new Position("frontend", Degree.HIGH_SCHOOL);
+    Position position2 = new Position("backend", Degree.COLLEGE);
+    Position position3 = new Position("tester", Degree.COLLEGE);
+    positionRepository.saveAll(Arrays.asList(position1, position2, position3));
+
     Employee testEmployee1 =
-        new Employee("Kata", "leader", 100000,
+        new Employee("Kata", 100000,
             LocalDateTime.of(2011, 9, 1, 8, 0, 0));
-    Employee testEmployee2 = new Employee("Bea", "referent", 90000,
+    Employee testEmployee2 = new Employee("Bea", 90000,
         LocalDateTime.of(2016, 9, 1, 8, 0, 0));
-    Employee testEmployee3 = new Employee("Beginner", "assistant", 50000,
+    Employee testEmployee3 = new Employee("Beginner", 50000,
         LocalDateTime.of(2019, 7, 1, 8, 0, 0));
-    Employee testEmployee4 = new Employee("Baba", "developer", 500000,
+    Employee testEmployee4 = new Employee("Baba", 500000,
         LocalDateTime.of(2015, 3, 1, 8, 0, 0));
-    Employee testEmployee5 = new Employee("Piripaki", "backend", 600000,
+    Employee testEmployee5 = new Employee("Piripaki", 600000,
         LocalDateTime.of(2013, 1, 1, 8, 0, 0));
-    Employee testEmployee6 = new Employee("Dino", "frontend", 400000,
+    Employee testEmployee6 = new Employee("Dino", 400000,
         LocalDateTime.of(2020, 11, 1, 8, 0, 0));
 
     Company testCompany1 = new Company("1234", "ÓE", "Bécsi út");
@@ -56,6 +67,13 @@ public class InitDBService {
     testEmployee5.setCompany(testCompany3);
     testEmployee6.setCompany(testCompany3);
 
+    testEmployee1.setPosition(position1);
+    testEmployee2.setPosition(position1);
+    testEmployee3.setPosition(position2);
+    testEmployee4.setPosition(position2);
+    testEmployee5.setPosition(position3);
+    testEmployee6.setPosition(position2);
+
     testCompany1.addEmployee(testEmployee1);
     testCompany2.addEmployee(testEmployee2);
     testCompany2.addEmployee(testEmployee3);
@@ -63,9 +81,9 @@ public class InitDBService {
     testCompany3.addEmployee(testEmployee5);
     testCompany3.addEmployee(testEmployee6);
 
-    CompanyType companyType1 = new CompanyType(BusinessType.BT);
-    CompanyType companyType2 = new CompanyType(BusinessType.ZRT);
-    CompanyType companyType3 = new CompanyType(BusinessType.KFT);
+    CompanyType companyType1 = new CompanyType(BusinessType.ZRT);
+    CompanyType companyType2 = new CompanyType(BusinessType.KFT);
+    CompanyType companyType3 = new CompanyType(BusinessType.BT);
 
     companyTypeRepository.saveAll(Arrays.asList(companyType1, companyType2, companyType3));
 

@@ -1,13 +1,15 @@
 package hu.webuni.hr.katka.services;
 
+import hu.webuni.hr.katka.entities.Position;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.entities.Employee;
-import hu.webuni.hr.katka.repositories.CompanyRepository;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
+import hu.webuni.hr.katka.repositories.PositionRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 public abstract class CRUDEmployeeService implements EmployeeService {
 
@@ -15,10 +17,11 @@ public abstract class CRUDEmployeeService implements EmployeeService {
   private EmployeeRepository employeeRepository;
 
   @Autowired
-  private CompanyRepository companyRepository;
+  private PositionRepository positionRepository;
 
+  @Transactional
   public Employee save(Employee employee) {
-    validateFields(employee, "Employee cannot be null."); //todo: nem jelenik meg az üzenet miért?
+    clearCompanyAndSetPosition(employee);
     return employeeRepository.save(employee);
   }
 
@@ -36,12 +39,12 @@ public abstract class CRUDEmployeeService implements EmployeeService {
   }
 
   public Employee modifyEmployee(Employee employee) {
-    validateFields(employee, "Employee cannot be null."); //todo: ellenőrizni a hibaüzenetet
     validateFields(employee.getId(), "Id cannot be null!");
     Employee originalEmployee = getEmployeeOrThrow(employee.getId());
-    if (employee.getCompany() == null){
+    if (employee.getCompany() == null) {
       employee.setCompany(originalEmployee.getCompany());
     }
+    clearCompanyAndSetPosition(employee);
     return employeeRepository.save(employee);
   }
 
@@ -50,18 +53,9 @@ public abstract class CRUDEmployeeService implements EmployeeService {
     return employeeRepository.findBySalaryGreaterThan(limit);
   }
 
-  private Employee getEmployeeOrThrow(Long id) {
-    validateFields(id, "Id cannot be null.");
-    Optional<Employee> employeeById = employeeRepository.findById(id);
-    if (employeeById.isEmpty()) {
-      throw new NotFoundException("There is no employee with the provided id.");
-    }
-    return employeeById.get();
-  }
-
   public List<Employee> findByPosition(String position) {
     validateFields(position, "Position cannot be null.");
-    return employeeRepository.findEmployeesByPosition(position);
+    return employeeRepository.findEmployeesByPositionName(position);
   }
 
   public List<Employee> findByName(String name) {
@@ -73,6 +67,30 @@ public abstract class CRUDEmployeeService implements EmployeeService {
     validateFields(startDate, "Start date cannot be null.");
     validateFields(endDate, "End date cannot be null.");
     return employeeRepository.findByStartOfWorkBetween(startDate, endDate);
+  }
+
+  private Employee getEmployeeOrThrow(Long id) {
+    validateFields(id, "Id cannot be null.");
+    Optional<Employee> employeeById = employeeRepository.findById(id);
+    if (employeeById.isEmpty()) {
+      throw new NotFoundException("There is no employee with the provided id.");
+    }
+    return employeeById.get();
+  }
+
+  private void clearCompanyAndSetPosition(Employee employee) {
+//    employee.setCompany(null);
+    Position position = null;
+    String positionName = employee.getPosition().getName();
+    if (positionName != null) {
+      List<Position> positionsByName = positionRepository.findByName(positionName);
+      if (positionsByName.isEmpty()) {
+        position = positionRepository.save(new Position(positionName, null));
+      } else {
+        position = positionsByName.get(0);
+      }
+    }
+    employee.setPosition(position);
   }
 
   private void validateFields(Object o, String message) {

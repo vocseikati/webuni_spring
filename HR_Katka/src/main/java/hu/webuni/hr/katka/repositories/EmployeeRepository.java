@@ -9,7 +9,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
   List<Employee> findBySalaryGreaterThan(Integer minSalary);
 
-  List<Employee> findEmployeesByPosition(String position);
+  List<Employee> findEmployeesByPositionName(String position);
 
   List<Employee> findAllByNameStartsWithIgnoreCase(String name);
 

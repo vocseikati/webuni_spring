@@ -20,7 +20,6 @@ public class Employee {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
-  private String position;
   private int salary;
   @Column(name = "entry_date")
   private LocalDateTime startOfWork;
@@ -28,13 +27,14 @@ public class Employee {
   @ManyToOne
   private Company company;
 
+  @ManyToOne
+  private Position position;
+
   public Employee() {
   }
 
-  public Employee(String name, String position, int salary,
-                  LocalDateTime startOfWork) {
+  public Employee(String name, int salary, LocalDateTime startOfWork) {
     this.name = name;
-    this.position = position;
     this.salary = salary;
     this.startOfWork = startOfWork;
   }
@@ -55,11 +55,11 @@ public class Employee {
     this.name = name;
   }
 
-  public String getPosition() {
+  public Position getPosition() {
     return position;
   }
 
-  public void setPosition(String position) {
+  public void setPosition(Position position) {
     this.position = position;
   }
 
