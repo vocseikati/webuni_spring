@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CompanyTypeRepository extends JpaRepository<CompanyType, Long> {
   boolean existsByName(BusinessType name);
 
-  List<CompanyType> findByName(String companyTypeName);
+  List<CompanyType> findByName(BusinessType companyTypeName);
 }

@@ -39,35 +39,20 @@ public class CompanyService {
 
   @Transactional
   public Company addCompany(Company company) {
-    CompanyType companyType;
     if (company.getCompanyType() != null) {
+      CompanyType companyType;
       String companyTypeName = company.getCompanyType().getName().name();
       BusinessType type = BusinessType.fromString(companyTypeName);
 
-      if (!contains(companyTypeName)) {
-        throw new IllegalArgumentException("Unexpected enum value: " + companyTypeName);
-      }
-
-      List<CompanyType> companyTypes = companyTypeRepository.findByName(companyTypeName);
+      List<CompanyType> companyTypes = companyTypeRepository.findByName(type);
       if (companyTypes.isEmpty()) {
-        companyType =
-            companyTypeRepository.save(new CompanyType(type));
+        companyType = companyTypeRepository.save(new CompanyType(type));
       } else {
         companyType = companyTypes.get(0);
       }
-      companyType.setName(type);
       company.setCompanyType(companyType);
     }
     return companyRepository.save(company);
-  }
-
-  private boolean contains(String companyTypeName) {
-    for (BusinessType value : BusinessType.values()) {
-      if (value.name().equals(companyTypeName)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   public void delete(Long id) {
