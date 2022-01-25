@@ -1,9 +1,7 @@
 package hu.webuni.hr.katka.controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
-import hu.webuni.hr.katka.dtos.Views;
 import hu.webuni.hr.katka.entities.AverageSalaryByPosition;
 import hu.webuni.hr.katka.mapper.CompanyMapper;
 import hu.webuni.hr.katka.mapper.EmployeeMapper;
@@ -13,6 +11,8 @@ import hu.webuni.hr.katka.services.CompanyService;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,7 +55,7 @@ public class CompanyRestController {
 
   @PostMapping
   public CompanyDto addNewCompany(@RequestBody @Valid CompanyDto company) {
-    Company savedCompany = companyService.save(companyMapper.dtoToCompany(company));
+    Company savedCompany = companyService.addCompany(companyMapper.dtoToCompany(company));
     return companyMapper.companyToDto(savedCompany);
   }
 
@@ -99,9 +99,10 @@ public class CompanyRestController {
   @GetMapping("/employeesAboveSalary")
   public List<CompanyDto> getCompaniesWithAboveSalary(@RequestParam Integer limit,
                                                       @RequestParam(required = false)
-                                                          Boolean full) {
+                                                          Boolean full,
+                                                      @SortDefault("id") Pageable pageable) {
     List<Company> companies =
-        companyService.getCompaniesWithEmployeesOverLimit(limit);
+        companyService.getCompaniesWithEmployeesOverLimit(pageable, limit);
     return mapCompanies(full, companies);
   }
 

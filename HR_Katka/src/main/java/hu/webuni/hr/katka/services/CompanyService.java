@@ -1,6 +1,8 @@
 package hu.webuni.hr.katka.services;
 
 import hu.webuni.hr.katka.entities.AverageSalaryByPosition;
+import hu.webuni.hr.katka.entities.BusinessType;
+import hu.webuni.hr.katka.entities.CompanyType;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.Employee;
@@ -8,12 +10,12 @@ import hu.webuni.hr.katka.repositories.CompanyRepository;
 import hu.webuni.hr.katka.repositories.CompanyTypeRepository;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CompanyService {
@@ -35,12 +37,37 @@ public class CompanyService {
     return getCompanyOrThrow(id);
   }
 
-  public Company save(Company company) {
-    validateFields(company, "Company cannot be null.");
+  @Transactional
+  public Company addCompany(Company company) {
+    CompanyType companyType;
     if (company.getCompanyType() != null) {
-      companyTypeRepository.save(company.getCompanyType());
+      String companyTypeName = company.getCompanyType().getName().name();
+      BusinessType type = BusinessType.fromString(companyTypeName);
+
+      if (!contains(companyTypeName)) {
+        throw new IllegalArgumentException("Unexpected enum value: " + companyTypeName);
+      }
+
+      List<CompanyType> companyTypes = companyTypeRepository.findByName(companyTypeName);
+      if (companyTypes.isEmpty()) {
+        companyType =
+            companyTypeRepository.save(new CompanyType(type));
+      } else {
+        companyType = companyTypes.get(0);
+      }
+      companyType.setName(type);
+      company.setCompanyType(companyType);
     }
     return companyRepository.save(company);
+  }
+
+  private boolean contains(String companyTypeName) {
+    for (BusinessType value : BusinessType.values()) {
+      if (value.name().equals(companyTypeName)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public void delete(Long id) {
@@ -96,8 +123,8 @@ public class CompanyService {
     return company;
   }
 
-  public List<Company> getCompaniesWithEmployeesOverLimit(Integer limit) {
-    return companyRepository.findByEmployeeWithSalaryHigherThan(limit);
+  public List<Company> getCompaniesWithEmployeesOverLimit(Pageable pageable, Integer limit) {
+    return companyRepository.findByEmployeeWithSalaryHigherThan(pageable, limit).getContent();
   }
 
   public List<Company> getCompaniesOverEmployeesNumber(Integer limit) {

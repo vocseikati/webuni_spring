@@ -40,5 +40,4 @@ public class CompanyType {
     this.name = name;
   }
 
-
 }

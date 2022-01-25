@@ -22,13 +22,14 @@ public interface CompanyMapper {
   CompanyDto companyToDto(Company company);
 
   @Mapping(target = "employeesOfCompany", ignore = true)
+  @Mapping(target = "companyType", ignore = true)
   @Named("summary")
   CompanyDto companyToSummaryDto(Company company);
 
   Company dtoToCompany(CompanyDto companyDto);
 
   @Mapping(target = "entryDate", source = "startOfWork")
-  @Mapping(target = "title", source = "position")
+  @Mapping(target = "title", source = "position.name")
   @Mapping(target = "company", ignore = true)
   EmployeeDto employeeToDto(Employee employee);
 

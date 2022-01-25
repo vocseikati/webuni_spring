@@ -3,6 +3,8 @@ package hu.webuni.hr.katka.repositories;
 import hu.webuni.hr.katka.entities.AverageSalaryByPosition;
 import hu.webuni.hr.katka.entities.Company;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,7 +12,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
   //lekérdezheted azon cégeket, melyeknek van egy adott limitnél nagyobb fizetésű alkalmazottja
   @Query("select distinct c from Company c join c.employeesOfCompany e where e.salary > :minSalary")
-  List<Company> findByEmployeeWithSalaryHigherThan(int minSalary);
+  Page<Company> findByEmployeeWithSalaryHigherThan(Pageable pageable, int minSalary);
 
   //azon cégek, melyeknél az alkalmazottak száma meghalad egy adott limitet
   @Query("select c from Company c where size(c.employeesOfCompany) > :minEmployeeCount")
