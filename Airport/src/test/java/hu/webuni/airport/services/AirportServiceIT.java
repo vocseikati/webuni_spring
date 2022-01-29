@@ -8,9 +8,13 @@ import hu.webuni.airport.repositories.AirportRepository;
 import hu.webuni.airport.repositories.FlightRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -29,6 +33,12 @@ class AirportServiceIT {
   @Autowired
   FlightRepository flightRepository;
 
+  @BeforeEach
+  public void init() {
+    flightRepository.deleteAll();
+    airportRepository.deleteAll();
+  }
+
   @Test
   void testCreateFlight() {
     String flightNumber = "ABC123";
@@ -44,6 +54,28 @@ class AirportServiceIT {
     assertThat(savedFlight.getTakeoffTime()).isCloseTo(dateTime, within(1, ChronoUnit.MICROS));
     assertThat(savedFlight.getTakeoff().getId()).isEqualTo(takeoff);
     assertThat(savedFlight.getLanding().getId()).isEqualTo(landing);
+  }
+
+  @Test
+  void testFindFlightsByExample(){
+    long airport1Id = createAirport("airport1", "iata1");
+    long airport2Id = createAirport("airport2", "iata2");
+    long airport3Id = createAirport("airport3", "2iata");
+    createAirport("airport4", "3ata1");
+    LocalDateTime takeoff = LocalDateTime.of(2021, 4, 23, 8, 0, 0);
+    long flight1 = createFlight("ABC123", airport1Id, airport3Id, takeoff);
+    long flight2 = createFlight("ABC1234", airport2Id, airport3Id, takeoff.plusHours(2));
+    createFlight("BC123", airport1Id, airport3Id, takeoff);
+    createFlight("ABC123", airport1Id, airport3Id, takeoff.plusDays(1));
+    createFlight("ABC123", airport3Id, airport3Id, takeoff);
+
+    Flight example = new Flight();
+    example.setFlightNumber("ABC123");
+    example.setTakeoffTime(takeoff);
+    example.setTakeoff(new Airport("sasa", "iata"));
+    List<Flight> foundFlights= this.airportService.findFlightsByExample(example);
+    assertThat(foundFlights.stream().map(Flight::getId).collect(Collectors.toList())).isEqualTo(
+        Arrays.asList(flight1, flight2));
   }
 
   private long createAirport(String name, String iata) {
