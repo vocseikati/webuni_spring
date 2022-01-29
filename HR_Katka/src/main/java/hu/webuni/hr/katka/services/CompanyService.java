@@ -33,6 +33,10 @@ public class CompanyService {
     return companyRepository.findAll();
   }
 
+  public List<Company> findAllWithEmployees() {
+    return companyRepository.findAllWithEmployees();
+  }
+
   public Company findById(Long id) {
     return getCompanyOrThrow(id);
   }

@@ -1,7 +1,7 @@
 package hu.webuni.airport.services;
 
-import hu.webuni.airport.configurations.models.Airport;
-import hu.webuni.airport.configurations.models.Flight;
+import hu.webuni.airport.models.Airport;
+import hu.webuni.airport.models.Flight;
 import hu.webuni.airport.repositories.AirportRepository;
 import hu.webuni.airport.repositories.FlightRepository;
 import java.time.LocalDateTime;
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,13 +69,30 @@ public class AirportService {
   }
 
   @Transactional
-  public void createFlight(){
+  public Flight createFlight(String flightNumber, long takeoffAirportId, long landingAirportId, LocalDateTime takeoffDateTime){
     Flight flight = new Flight();
-    flight.setFlightNumber("adhfads");
-    flight.setTakeoff(airportRepository.findById(1L).get());
-    flight.setTakeoff(airportRepository.findById(3L).get());
-    flight.setTakeoffTime(LocalDateTime.of(2022,1,1,8,6));
-    flightRepository.save(flight);
+    flight.setFlightNumber(flightNumber);
+    flight.setTakeoff(airportRepository.findById(takeoffAirportId).get());
+    flight.setLanding(airportRepository.findById(landingAirportId).get());
+    flight.setTakeoffTime(takeoffDateTime);
+    return flightRepository.save(flight);
+  }
+
+  public List<Flight> findFlightsByExample(Flight example){
+    Long id = example.getId();
+    String flightNumber = example.getFlightNumber();
+    Airport takeoff = example.getTakeoff();
+    String takeoffIata = null;
+    if (takeoff != null)
+      takeoffIata = takeoff.getIata();
+    LocalDateTime takeoffTime = example.getTakeoffTime();
+
+    Specification<Flight> spec = Specification.where(null);
+
+    if (id > 0){
+      spec = spec.and(FlightSpecification.hasId(id));
+    }
+    return null;
   }
 
 }

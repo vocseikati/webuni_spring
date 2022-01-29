@@ -1,9 +1,8 @@
-package hu.webuni.airport.configurations.models;
+package hu.webuni.airport.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -23,6 +22,11 @@ public class Airport {
 
   public Airport(long id, String name, String iata) {
     this.id = id;
+    this.name = name;
+    this.iata = iata;
+  }
+
+  public Airport(String name, String iata) {
     this.name = name;
     this.iata = iata;
   }

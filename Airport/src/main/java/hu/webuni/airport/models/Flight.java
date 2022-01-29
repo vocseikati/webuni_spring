@@ -1,4 +1,4 @@
-package hu.webuni.airport.configurations.models;
+package hu.webuni.airport.models;
 
 import java.time.LocalDateTime;
 import javax.persistence.Entity;

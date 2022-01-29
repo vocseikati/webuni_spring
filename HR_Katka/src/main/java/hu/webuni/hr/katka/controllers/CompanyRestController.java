@@ -38,8 +38,17 @@ public class CompanyRestController {
 
   @GetMapping
   public List<CompanyDto> listAllCompanies(@RequestParam(required = false) Boolean full) {
-    List<Company> companies = companyService.findAll();
-    return mapCompanies(full, companies);
+//    List<Company> companies = companyService.findAll();
+//    return mapCompanies(full, companies);
+    List<Company> companies;
+    boolean notFull = full == null || !full;
+    if (notFull) {
+      companies = companyService.findAll();
+      return companyMapper.companiesToSummaryDtos(companies);
+    } else {
+      companies = companyService.findAllWithEmployees();
+      return companyMapper.companiesToDtos(companies);
+    }
   }
 
   @GetMapping("{id}")

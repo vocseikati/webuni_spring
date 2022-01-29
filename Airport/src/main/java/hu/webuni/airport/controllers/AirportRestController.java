@@ -1,6 +1,6 @@
 package hu.webuni.airport.controllers;
 
-import hu.webuni.airport.configurations.models.Airport;
+import hu.webuni.airport.models.Airport;
 import hu.webuni.airport.dtos.AirportDto;
 import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.services.AirportService;
