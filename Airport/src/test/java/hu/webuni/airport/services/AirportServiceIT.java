@@ -1,6 +1,7 @@
 package hu.webuni.airport.services;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import hu.webuni.airport.models.Airport;
 import hu.webuni.airport.models.Flight;
@@ -8,13 +9,9 @@ import hu.webuni.airport.repositories.AirportRepository;
 import hu.webuni.airport.repositories.FlightRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.stream.Collectors;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -57,7 +54,7 @@ class AirportServiceIT {
   }
 
   @Test
-  void testFindFlightsByExample(){
+  void testFindFlightsByExample() {
     long airport1Id = createAirport("airport1", "iata1");
     long airport2Id = createAirport("airport2", "iata2");
     long airport3Id = createAirport("airport3", "2iata");
@@ -73,15 +70,17 @@ class AirportServiceIT {
     example.setFlightNumber("ABC123");
     example.setTakeoffTime(takeoff);
     example.setTakeoff(new Airport("sasa", "iata"));
-    List<Flight> foundFlights= this.airportService.findFlightsByExample(example);
-    assertThat(foundFlights.stream().map(Flight::getId).collect(Collectors.toList())).isEqualTo(
-        Arrays.asList(flight1, flight2));
+    List<Flight> foundFlights = this.airportService.findFlightsByExample(example);
+    assertThat(foundFlights.stream().map(Flight::getId).collect(Collectors.toList()))
+        .containsExactly(flight1, flight2);
   }
 
   private long createAirport(String name, String iata) {
     return airportRepository.save(new Airport(name, iata)).getId();
   }
-  private long createFlight(String flightNumber, long takeoff, long landing, LocalDateTime dateTime) {
+
+  private long createFlight(String flightNumber, long takeoff, long landing,
+                            LocalDateTime dateTime) {
     return airportService.createFlight(flightNumber, takeoff, landing, dateTime).getId();
   }
 }
