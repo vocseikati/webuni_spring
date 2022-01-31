@@ -13,7 +13,6 @@ public class Position {
   private Long id;
   private String name;
   private Degree minDegree;
-  private int minSalary;
 
   public Position() {
   }
@@ -47,11 +46,5 @@ public class Position {
     this.minDegree = minDegree;
   }
 
-  public int getMinSalary() {
-    return minSalary;
-  }
 
-  public void setMinSalary(int minSalary) {
-    this.minSalary = minSalary;
-  }
 }

@@ -39,27 +39,15 @@ public class CompanyRestController {
   @GetMapping
   public List<CompanyDto> listAllCompanies(@RequestParam(required = false) Boolean full) {
 //    List<Company> companies = companyService.findAll();
-//    return mapCompanies(full, companies);
-    List<Company> companies;
-    boolean notFull = full == null || !full;
-    if (notFull) {
-      companies = companyService.findAll();
-      return companyMapper.companiesToSummaryDtos(companies);
-    } else {
-      companies = companyService.findAllWithEmployees();
-      return companyMapper.companiesToDtos(companies);
-    }
+    List<Company> companies = companyService.findAll(full);
+    return mapCompanies(full, companies);
   }
 
   @GetMapping("{id}")
-  public CompanyDto getCompanyByIdWithoutEmployees(@PathVariable Long id,
-                                                   @RequestParam(required = false) Boolean full) {
-    Company company = companyService.findById(id);
-    if (full != null && full) {
-      return companyMapper.companyToDto(company);
-    } else {
-      return companyMapper.companyToSummaryDto(company);
-    }
+  public CompanyDto getCompanyById(@PathVariable Long id,
+                                   @RequestParam(required = false) Boolean full) {
+    Company company = companyService.findById(id, full);
+    return mapCompany(full, company);
   }
 
   @PostMapping
@@ -130,10 +118,22 @@ public class CompanyRestController {
   }
 
   private List<CompanyDto> mapCompanies(Boolean full, List<Company> companies) {
-    if (full != null && full) {
+    if (isFull(full)) {
       return companyMapper.companiesToDtos(companies);
     } else {
       return companyMapper.companiesToSummaryDtos(companies);
     }
+  }
+
+  private CompanyDto mapCompany(Boolean full, Company company) {
+    if (isFull(full)) {
+      return companyMapper.companyToDto(company);
+    } else {
+      return companyMapper.companyToSummaryDto(company);
+    }
+  }
+
+  private boolean isFull(Boolean full) {
+    return full != null && full;
   }
 }

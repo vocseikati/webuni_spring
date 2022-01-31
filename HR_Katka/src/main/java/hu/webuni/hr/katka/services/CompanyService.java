@@ -29,16 +29,21 @@ public class CompanyService {
   @Autowired
   CompanyTypeRepository companyTypeRepository;
 
-  public List<Company> findAll() {
-    return companyRepository.findAll();
+  public List<Company> findAll(Boolean full) {
+    boolean notFull = full == null || !full;
+    if (notFull) {
+      return companyRepository.findAll();
+    } else {
+      return companyRepository.findAllWithEmployees();
+    }
   }
 
-  public List<Company> findAllWithEmployees() {
-    return companyRepository.findAllWithEmployees();
-  }
+//  public List<Company> findAllWithEmployees() {
+//    return companyRepository.findAllWithEmployees();
+//  }
 
-  public Company findById(Long id) {
-    return getCompanyOrThrow(id);
+  public Company findById(Long id, Boolean full) {
+    return getCompanyOrThrow(id, full);
   }
 
   @Transactional
@@ -124,8 +129,22 @@ public class CompanyService {
     return companyRepository.findAverageSalariesByPosition(companyid);
   }
 
+  private Company getCompanyOrThrow(Long id, Boolean full) {
+    boolean notFull = full == null || !full;
+    Optional<Company> companyById;
+    if (notFull) {
+      companyById = companyRepository.findById(id);
+    } else {
+      companyById = companyRepository.findByIdWithEmployees(id);
+    }
+    if (companyById.isEmpty()) {
+      throw new NotFoundException("There is no company with the provided id.");
+    }
+    return companyById.get();
+  }
+
   private Company getCompanyOrThrow(Long id) {
-    Optional<Company> companyById = companyRepository.findById(id);
+    Optional<Company> companyById= companyRepository.findById(id);
     if (companyById.isEmpty()) {
       throw new NotFoundException("There is no company with the provided id.");
     }

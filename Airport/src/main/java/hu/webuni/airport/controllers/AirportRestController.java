@@ -4,6 +4,7 @@ import hu.webuni.airport.models.Airport;
 import hu.webuni.airport.dtos.AirportDto;
 import hu.webuni.airport.mapper.AirportMapper;
 import hu.webuni.airport.services.AirportService;
+import hu.webuni.airport.services.LogEntryService;
 import java.util.List;
 import java.util.NoSuchElementException;
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ public class AirportRestController {
 
   @Autowired
   AirportMapper airportMapper;
+
 
   @GetMapping
   public List<AirportDto> getAll() {
