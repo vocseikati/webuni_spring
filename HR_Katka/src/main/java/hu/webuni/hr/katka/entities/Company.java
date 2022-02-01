@@ -2,17 +2,33 @@ package hu.webuni.hr.katka.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-@NamedEntityGraph(name = "Company.full", attributeNodes = @NamedAttributeNode("employeesOfCompany"))
+@NamedEntityGraph(name = "Company.full",
+    attributeNodes = {
+        @NamedAttributeNode("employeesOfCompany"),
+        @NamedAttributeNode("companyType"),
+        @NamedAttributeNode(value = "employeesOfCompany", subgraph = "employeesOfCompany-subgraph")
+    },
+    subgraphs = {
+        @NamedSubgraph(name = "employeesOfCompany-subgraph",
+            attributeNodes = {
+                @NamedAttributeNode("position")
+            }
+        )
+    }
+)
 @Entity
 @Table(name = "companies")
 public class Company {
@@ -24,7 +40,7 @@ public class Company {
   private String name;
   private String address;
 
-  @OneToMany(mappedBy = "company")
+  @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private List<Employee> employeesOfCompany;
 
   @ManyToOne
@@ -87,8 +103,8 @@ public class Company {
     this.companyType = companyType;
   }
 
-  public void addEmployee(Employee employee){
-    if (employeesOfCompany == null){
+  public void addEmployee(Employee employee) {
+    if (employeesOfCompany == null) {
       this.employeesOfCompany = new ArrayList<>();
     }
     this.employeesOfCompany.add(employee);

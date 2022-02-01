@@ -3,6 +3,7 @@ package hu.webuni.hr.katka.services;
 import hu.webuni.hr.katka.entities.AverageSalaryByPosition;
 import hu.webuni.hr.katka.entities.BusinessType;
 import hu.webuni.hr.katka.entities.CompanyType;
+import hu.webuni.hr.katka.entities.Position;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.Employee;
@@ -10,6 +11,7 @@ import hu.webuni.hr.katka.repositories.CompanyRepository;
 import hu.webuni.hr.katka.repositories.CompanyTypeRepository;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
 
+import hu.webuni.hr.katka.repositories.PositionRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class CompanyService {
 
   @Autowired
   CompanyTypeRepository companyTypeRepository;
+
+  @Autowired
+  PositionRepository positionRepository;
 
   public List<Company> findAll(Boolean full) {
     boolean notFull = full == null || !full;
@@ -48,6 +53,11 @@ public class CompanyService {
 
   @Transactional
   public Company addCompany(Company company) {
+    setCompanyType(company);
+    return companyRepository.save(company);
+  }
+
+  private void setCompanyType(Company company) {
     if (company.getCompanyType() != null) {
       CompanyType companyType;
       String companyTypeName = company.getCompanyType().getName().name();
@@ -61,7 +71,6 @@ public class CompanyService {
       }
       company.setCompanyType(companyType);
     }
-    return companyRepository.save(company);
   }
 
   public void delete(Long id) {
@@ -78,13 +87,31 @@ public class CompanyService {
     return companyRepository.save(company);
   }
 
+  @Transactional
   public Company addNewEmployeeToCompany(Long id, Employee newEmployee) {
     validateFields(id, "Id cannot be null.");
     validateFields(newEmployee, "Employee cannot be null.");
     Company company = getCompanyOrThrow(id);
-    company.addEmployee(newEmployee);
-    employeeRepository.save(newEmployee);
+
+    setPosition(newEmployee);
+
+    Employee savedEmployee = employeeRepository.save(newEmployee);
+    company.addEmployee(savedEmployee);
     return company;
+  }
+
+  private void setPosition(Employee employee) {
+    Position position = null;
+    String positionName = employee.getPosition().getName();
+    if (positionName != null) {
+      List<Position> positionsByName = positionRepository.findByName(positionName);
+      if (positionsByName.isEmpty()) {
+        position = positionRepository.save(new Position(positionName, null));
+      } else {
+        position = positionsByName.get(0);
+      }
+    }
+    employee.setPosition(position);
   }
 
   public Company deleteEmployeeFromCompany(Long id, Long employeeId) {
