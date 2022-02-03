@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-public abstract class CRUDEmployeeService implements EmployeeService {
+public abstract class AbstractEmployeeService implements EmployeeService {
 
   @Autowired
   private EmployeeRepository employeeRepository;
