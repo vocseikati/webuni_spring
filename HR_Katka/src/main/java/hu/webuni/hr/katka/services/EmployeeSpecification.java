@@ -4,7 +4,6 @@ import hu.webuni.hr.katka.entities.Company_;
 import hu.webuni.hr.katka.entities.Employee;
 import hu.webuni.hr.katka.entities.Employee_;
 import hu.webuni.hr.katka.entities.Position_;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,7 +16,7 @@ public class EmployeeSpecification {
 
   public static Specification<Employee> hasName(String name) {
     return (root, query, criteriaBuilder) -> criteriaBuilder
-        .like(root.get(Employee_.name), name + "%");
+        .like(criteriaBuilder.lower(root.get(Employee_.name)), name.toLowerCase() + "%");
   }
 
   public static Specification<Employee> hasPosition(String positionName) {
@@ -32,11 +31,14 @@ public class EmployeeSpecification {
   }
 
   public static Specification<Employee> hasEntryDate(LocalDateTime entryDate) {
-    return (root, cq, cb) -> cb.equal(root.get(Employee_.startOfWork), entryDate);
+    LocalDateTime startOfDay = LocalDateTime.of(entryDate.toLocalDate(), LocalTime.of(0, 0));
+    return (root, cq, cb) -> cb
+        .between(root.get(Employee_.startOfWork), startOfDay, startOfDay.plusDays(1));
   }
 
   public static Specification<Employee> hasCompany(String companyName) {
-    return (root, cq, cb) -> cb.like(root.get(Employee_.company).get(Company_.name.toString().toLowerCase()),
-        companyName.toLowerCase() + "%");
+    return (root, cq, cb) -> cb
+        .like(cb.lower(root.get(Employee_.company).get(Company_.name)),
+            companyName.toLowerCase() + "%");
   }
 }

@@ -97,5 +97,11 @@ public class EmployeeRestController {
     return employeeMapper.employeesToDtos(employees);
   }
 
+  @PostMapping("/search")
+  public List<EmployeeDto> search(@RequestBody EmployeeDto example){
+    List<Employee> employeesByExample =
+        employeeService.findEmployeesByExample(employeeMapper.dtoToEmployee(example));
+    return employeeMapper.employeesToDtos(employeesByExample);
+  }
 
 }

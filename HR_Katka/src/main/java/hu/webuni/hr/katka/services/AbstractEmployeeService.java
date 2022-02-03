@@ -1,5 +1,6 @@
 package hu.webuni.hr.katka.services;
 
+import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.Position;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.entities.Employee;
@@ -9,7 +10,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 public abstract class AbstractEmployeeService implements EmployeeService {
 
@@ -91,6 +95,53 @@ public abstract class AbstractEmployeeService implements EmployeeService {
       }
     }
     employee.setPosition(position);
+  }
+
+  public List<Employee> findEmployeesByExample(Employee example) {
+    Long id = example.getId();
+    String name = example.getName();
+    String positionName = null;
+    String companyName = null;
+    Position position = example.getPosition();
+    int salary = example.getSalary();
+    Company company = example.getCompany();
+    LocalDateTime entryDate = example.getStartOfWork();
+
+    Specification<Employee> spec = Specification.where(null);
+
+    if (id != null && id > 0) {
+      spec = spec.and(EmployeeSpecification.hasId(id));
+    }
+
+    if (StringUtils.hasText(name)) {
+      spec = spec.and(EmployeeSpecification.hasName(name));
+    }
+
+    if (position != null) {
+      positionName = position.getName();
+    }
+
+    if (StringUtils.hasText(positionName)) {
+      spec = spec.or(EmployeeSpecification.hasPosition(positionName));
+    }
+
+    if (salary > 0) {
+      spec = spec.and(EmployeeSpecification.hasSalary(salary));
+    }
+
+    if (entryDate != null) {
+      spec = spec.and(EmployeeSpecification.hasEntryDate(entryDate));
+    }
+
+    if (company != null && company.getName() != null) {
+      companyName = company.getName();
+    }
+
+    if (StringUtils.hasText(companyName)) {
+      spec = spec.and(EmployeeSpecification.hasCompany(companyName));
+    }
+
+    return employeeRepository.findAll(spec, Sort.by("id"));
   }
 
   private void validateFields(Object o, String message) {

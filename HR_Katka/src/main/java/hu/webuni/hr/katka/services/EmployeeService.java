@@ -26,4 +26,6 @@ public interface EmployeeService {
   List<Employee> findByName(String name);
 
   List<Employee> findByStartOfWorkBetween(LocalDateTime startDate, LocalDateTime endDate);
+
+  public List<Employee> findEmployeesByExample(Employee example);
 }
