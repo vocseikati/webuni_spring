@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: smart
+
+  mvc:
+    format:
+      date-time: yyyy-MM-dd HH:mm:ss
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hr
+    username: postgres
+    password: geli
+
+hr:
+  def:
+    percent: 5
+  smart:
+    limit1: 10
+    limit2: 5
+    limit3: 2.5
+    percent1: 10
+    percent2: 5
+    percent3: 2
+    limits:
+      10: 10
+      5: 5
+      2.5: 2
+      1:  1
