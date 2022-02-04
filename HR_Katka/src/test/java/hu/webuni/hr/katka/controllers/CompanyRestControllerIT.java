@@ -5,28 +5,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import hu.webuni.hr.katka.dtos.CompanyDto;
 import hu.webuni.hr.katka.dtos.EmployeeDto;
-import hu.webuni.hr.katka.entities.BusinessType;
-import hu.webuni.hr.katka.entities.Company;
-import hu.webuni.hr.katka.entities.CompanyType;
-import hu.webuni.hr.katka.entities.Degree;
-import hu.webuni.hr.katka.entities.Employee;
-import hu.webuni.hr.katka.entities.Position;
-import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.repositories.CompanyRepository;
 import hu.webuni.hr.katka.repositories.CompanyTypeRepository;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
 import hu.webuni.hr.katka.repositories.PositionRepository;
-import hu.webuni.hr.katka.services.CompanyService;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.reactive.server.WebTestClient.ResponseSpec;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
@@ -36,18 +28,6 @@ class CompanyRestControllerIT {
 
   @Autowired
   WebTestClient webTestClient;
-
-  @Autowired
-  CompanyRepository companyRepository;
-
-  @Autowired
-  PositionRepository positionRepository;
-
-  @Autowired
-  EmployeeRepository employeeRepository;
-
-  @Autowired
-  CompanyTypeRepository companyTypeRepository;
 
   @Test
   public void save_Company_WorksCorrectly() {
@@ -72,29 +52,45 @@ class CompanyRestControllerIT {
   @Test
   public void save_EmployeeToCompany_WorksCorrectly() {
     List<CompanyDto> companies = getAllCompanies();
-    Company company = companyRepository.findById(companies.get(0).getId())
-        .orElseThrow(() -> new NotFoundException("There is no company with the provided id."));
 
-    List<Employee> employeesBefore = company.getEmployeesOfCompany();
+    CompanyDto company = companies.get(0);
 
-    Employee newEmployee =
-        new Employee("Test1", 100, LocalDateTime.of(2019, 1, 1, 8, 0, 0));
+    List<EmployeeDto> employeesBefore = company.getEmployeesOfCompany();
 
-    Position position = new Position("tester", Degree.HIGH_SCHOOL);
-    positionRepository.save(position);
+    EmployeeDto newEmployee =
+        new EmployeeDto(0L, "Test1", "Test title", 100, LocalDateTime.of(2019, 1, 1, 8, 0, 0));
 
-    newEmployee.setPosition(position);
+    addEmployeeToCompany(company.getId(), newEmployee)
+        .expectStatus()
+        .isOk();
 
-    Employee savedEmployee = employeeRepository.save(newEmployee);
-    company.addEmployee(savedEmployee);
+    saveEmployee(newEmployee)
+        .expectStatus()
+        .isOk();
 
-    List<Employee> employeesAfter = company.getEmployeesOfCompany();
+    saveCompany(company)
+        .expectStatus()
+        .isOk();
+
+
+    List<EmployeeDto> employeesAfter = company.getEmployeesOfCompany();
 
     assertThat(employeesAfter.size()).isEqualTo(employeesBefore.size() + 1);
     assertThat(employeesAfter.get(employeesAfter.size() - 1))
         .usingRecursiveComparison()
         .ignoringFields("id")
         .isEqualTo(newEmployee);
+  }
+
+  private ResponseSpec addEmployeeToCompany(long companyId, EmployeeDto newEmployeeDto) {
+    String path = BASE_URI + "/" + companyId + "/employees";
+    return webTestClient
+        .post()
+        .uri(path)
+        .bodyValue(newEmployeeDto)
+        .exchange()
+        .expectStatus()
+        .isOk();
   }
 
   private List<CompanyDto> getAllCompanies() {
@@ -111,7 +107,7 @@ class CompanyRestControllerIT {
     return responseList;
   }
 
-  private WebTestClient.ResponseSpec saveCompany(CompanyDto newCompany) {
+  private ResponseSpec saveCompany(CompanyDto newCompany) {
     return webTestClient
         .post()
         .uri(BASE_URI)
@@ -119,7 +115,7 @@ class CompanyRestControllerIT {
         .exchange();
   }
 
-  private WebTestClient.ResponseSpec saveEmployee(EmployeeDto newEmployee) {
+  private ResponseSpec saveEmployee(EmployeeDto newEmployee) {
     return webTestClient
         .post()
         .uri("api/employees")
