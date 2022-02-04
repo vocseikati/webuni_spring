@@ -18,7 +18,7 @@ public class HrApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    initDBService.insertTestData();
+//    initDBService.insertTestData();
 //    initDBService.clearDB();
   }
 }

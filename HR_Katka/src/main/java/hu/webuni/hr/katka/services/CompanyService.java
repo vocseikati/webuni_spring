@@ -79,6 +79,7 @@ public class CompanyService {
     companyRepository.delete(company);
   }
 
+  @Transactional
   public Company modifyCompany(Company company) {
     validateFields(company, "Company cannot be null.");
     validateFields(company.getId(), "Company Id cannot be null.");
@@ -95,8 +96,8 @@ public class CompanyService {
 
     setPosition(newEmployee);
 
-    Employee savedEmployee = employeeRepository.save(newEmployee);
-    company.addEmployee(savedEmployee);
+    company.addEmployee(newEmployee);
+    employeeRepository.save(newEmployee);
     return company;
   }
 
