@@ -42,6 +42,7 @@ public abstract class AbstractEmployeeService implements EmployeeService {
     employeeRepository.delete(getEmployeeOrThrow(id));
   }
 
+  @Transactional
   public Employee modifyEmployee(Employee employee) {
     validateFields(employee.getId(), "Id cannot be null!");
     Employee originalEmployee = getEmployeeOrThrow(employee.getId());

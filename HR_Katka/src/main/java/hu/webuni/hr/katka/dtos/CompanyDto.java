@@ -23,6 +23,18 @@ public class CompanyDto {
   public CompanyDto() {
   }
 
+  public CompanyDto(Long id,
+                    @NotEmpty(message = "Registration number must have a value.") String registrationNumber,
+                    @NotEmpty(message = "Name must have a value.") String name,
+                    @NotEmpty(message = "Address must have a value.") String address,
+                    CompanyType companyType) {
+    this.id = id;
+    this.registrationNumber = registrationNumber;
+    this.name = name;
+    this.address = address;
+    this.companyType = companyType;
+  }
+
   public Long getId() {
     return id;
   }

@@ -110,4 +110,5 @@ public class Company {
     this.employeesOfCompany.add(employee);
     employee.setCompany(this);
   }
+
 }

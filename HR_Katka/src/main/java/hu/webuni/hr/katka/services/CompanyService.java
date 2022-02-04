@@ -87,7 +87,7 @@ public class CompanyService {
     return companyRepository.save(company);
   }
 
-  @Transactional
+//  @Transactional
   public Company addNewEmployeeToCompany(Long id, Employee newEmployee) {
     validateFields(id, "Id cannot be null.");
     validateFields(newEmployee, "Employee cannot be null.");
