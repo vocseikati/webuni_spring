@@ -2,6 +2,7 @@ package hu.webuni.airport;
 
 import hu.webuni.airport.services.DefaultDiscountService;
 import hu.webuni.airport.services.DiscountService;
+import hu.webuni.airport.services.InitDbService;
 import hu.webuni.airport.services.PriceService;
 import hu.webuni.airport.services.SpecialDiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class AirportApplication implements CommandLineRunner {
   @Autowired
   PriceService priceService;
 
+  @Autowired
+  InitDbService initDbService;
+
   public static void main(String[] args) {
     SpringApplication.run(AirportApplication.class, args);
   }
@@ -24,6 +28,7 @@ public class AirportApplication implements CommandLineRunner {
   public void run(String... args) throws Exception {
     System.out.println(priceService.getFinalPrice(200));
     System.out.println(priceService.getFinalPrice(20000));
+    initDbService.createUsersIfNeeded();
   }
 
 //  @Bean //ezzel nem működik, a config osztályban működik - @Primary-vel igen
