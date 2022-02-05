@@ -93,7 +93,6 @@ public class AirportService {
     String flightNumber = example.getFlightNumber();
     Airport takeoff = example.getTakeoff();
     String takeoffIata = null;
-    Airport takeoff = example.getTakeoff();
     if (takeoff != null) {
       takeoffIata = takeoff.getIata();
     }

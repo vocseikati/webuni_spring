@@ -9,9 +9,10 @@ import hu.webuni.airport.repositories.AirportRepository;
 import hu.webuni.airport.repositories.FlightRepository;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
-import static org.assertj.core.api.Assertions.*;
 
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
