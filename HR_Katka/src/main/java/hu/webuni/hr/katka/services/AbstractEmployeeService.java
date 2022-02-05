@@ -1,5 +1,7 @@
 package hu.webuni.hr.katka.services;
 
+import static hu.webuni.hr.katka.services.ValidationService.validateFields;
+
 import hu.webuni.hr.katka.entities.Company;
 import hu.webuni.hr.katka.entities.Position;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
@@ -145,14 +147,4 @@ public abstract class AbstractEmployeeService implements EmployeeService {
     return employeeRepository.findAll(spec, Sort.by("id"));
   }
 
-  private void validateFields(Object o, String message) {
-    if (o instanceof String) {
-      if (((String) o).isEmpty()) {
-        throw new IllegalArgumentException(message);
-      }
-    }
-    if (o == null) {
-      throw new IllegalArgumentException(message);
-    }
-  }
 }

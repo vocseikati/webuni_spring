@@ -1,12 +1,15 @@
 package hu.webuni.hr.katka.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -26,6 +29,9 @@ public class Employee {
 
   @ManyToOne
   private Position position;
+
+  @OneToMany(mappedBy = "employee")
+  private List<Holiday> holidayRequests;
 
   public Employee() {
   }
@@ -82,5 +88,22 @@ public class Employee {
 
   public void setCompany(Company company) {
     this.company = company;
+  }
+
+  public List<Holiday> getHolidayRequests() {
+    return holidayRequests;
+  }
+
+  public void setHolidayRequests(List<Holiday> holidayRequests) {
+    this.holidayRequests = holidayRequests;
+  }
+
+  public void addHolidayRequest(Holiday holidayRequest)
+  {
+    if(this.holidayRequests == null)
+      this.holidayRequests = new ArrayList<>();
+
+    this.holidayRequests.add(holidayRequest);
+    holidayRequest.setEmployee(this);
   }
 }

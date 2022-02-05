@@ -4,31 +4,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public class HolidayDto {
 
   private long id;
-  @NotEmpty(message = "Start date must have a value.")
+  @NotNull(message = "Start date must have a value.")
   private LocalDate startDate;
-  @NotEmpty(message = "Start date must have a value.")
+  @NotNull(message = "Start date must have a value.")
   private LocalDate endDate;
   private Boolean approved;
 
-  private long employeeId;
-  private long bossId;
+  @NotNull(message = "Employee id must have a value.")
+  private Long employeeId;
+//  @NotNull(message = "Boss id must have a value.")
+//  private Long bossId;
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private LocalDateTime createdAt = LocalDateTime.now();
 
   public HolidayDto() {
-  }
-
-  public HolidayDto(LocalDate startDate, LocalDate endDate, LocalDateTime createdAt,
-                    Boolean approved) {
-    this.startDate = startDate;
-    this.endDate = endDate;
-    this.createdAt = createdAt;
-    this.approved = approved;
   }
 
   public long getId() {
@@ -79,11 +74,11 @@ public class HolidayDto {
     this.employeeId = employeeId;
   }
 
-  public long getBossId() {
-    return bossId;
-  }
-
-  public void setBossId(long bossId) {
-    this.bossId = bossId;
-  }
+//  public long getBossId() {
+//    return bossId;
+//  }
+//
+//  public void setBossId(long bossId) {
+//    this.bossId = bossId;
+//  }
 }

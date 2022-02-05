@@ -9,7 +9,7 @@ public interface HolidayService {
 
   Holiday getHolidayById(long id);
 
-  Holiday addHolidayRequest(Holiday request);
+  Holiday addHolidayRequest(Holiday request, Long employeeId);
 
   Holiday approveHoliday(long id);
 
