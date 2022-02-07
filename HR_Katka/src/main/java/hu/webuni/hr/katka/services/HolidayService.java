@@ -11,9 +11,11 @@ public interface HolidayService {
 
   Holiday addHolidayRequest(Holiday request, Long employeeId);
 
-  Holiday approveHoliday(long id);
+  Holiday approveHoliday(Long id);
 
-  Holiday modifyHoliday(Holiday holiday);
+  Holiday modifyHoliday(Holiday holiday, Long employeeId);
 
-  void deleteHolidayRequest(long id);
+  void deleteHolidayRequest(Long id);
+
+  List<Holiday> getHolidayRequestOfEmployee(Long employeeId);
 }

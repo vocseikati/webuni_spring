@@ -40,7 +40,7 @@ public class Company {
   private String name;
   private String address;
 
-  @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "company")
   private List<Employee> employeesOfCompany;
 
   @ManyToOne

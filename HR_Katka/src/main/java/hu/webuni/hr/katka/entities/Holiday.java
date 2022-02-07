@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.PrePersist;
 
 @Entity
@@ -24,8 +26,8 @@ public class Holiday {
   @ManyToOne
   private Employee employee;
 
-  @ManyToOne
-  private Employee boss;
+//  @ManyToOne
+//  private Employee boss;
 
   public Holiday() {
   }
@@ -87,11 +89,11 @@ public class Holiday {
     this.employee = employee;
   }
 
-  public Employee getBoss() {
-    return boss;
-  }
-
-  public void setBoss(Employee boss) {
-    this.boss = boss;
-  }
+//  public Employee getBoss() {
+//    return boss;
+//  }
+//
+//  public void setBoss(Employee boss) {
+//    this.boss = boss;
+//  }
 }
