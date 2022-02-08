@@ -73,9 +73,8 @@ public class DefaultHolidayService implements HolidayService {
 
   @Override
   public List<Holiday> getHolidayRequestOfEmployee(Long employeeId) {
-//    Employee employee = getEmployeeOrThrow(employeeId); //todo
-//    return holidayRepository;
-    return null;
+    getEmployeeOrThrow(employeeId);
+    return holidayRepository.findAllByEmployee_Id(employeeId);
   }
 
   private void isApproved(Holiday holiday) {
