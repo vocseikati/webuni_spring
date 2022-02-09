@@ -27,7 +27,7 @@ public abstract class AbstractEmployeeService implements EmployeeService {
 
   @Transactional
   public Employee save(Employee employee) {
-    clearCompanyAndSetPosition(employee);
+    setPosition(employee);
     return employeeRepository.save(employee);
   }
 
@@ -51,7 +51,7 @@ public abstract class AbstractEmployeeService implements EmployeeService {
     if (employee.getCompany() == null) {
       employee.setCompany(originalEmployee.getCompany());
     }
-    clearCompanyAndSetPosition(employee);
+    setPosition(employee);
     return employeeRepository.save(employee);
   }
 
@@ -85,7 +85,7 @@ public abstract class AbstractEmployeeService implements EmployeeService {
     return employeeById.get();
   }
 
-  private void clearCompanyAndSetPosition(Employee employee) {
+  private void setPosition(Employee employee) {
 //    employee.setCompany(null);
     Position position = null;
     String positionName = employee.getPosition().getName();

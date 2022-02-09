@@ -90,7 +90,7 @@ public class CompanyService {
     return companyRepository.save(company);
   }
 
-//  @Transactional
+  @Transactional
   public Company addNewEmployeeToCompany(Long id, Employee newEmployee) {
     validateFields(id, "Id cannot be null.");
     validateFields(newEmployee, "Employee cannot be null.");
@@ -130,10 +130,11 @@ public class CompanyService {
     }
     employeeToRemove.setCompany(null);
     employeeList.remove(employeeToRemove);
-    employeeRepository.save(employeeToRemove);
+    employeeRepository.save(employeeToRemove); // HA TRANSACTIONAL AKKOR EZ TÖRÖLHETŐ
     return company;
   }
 
+  @Transactional
   public Company modifyAllEmployeesFromCompany(Long id, List<Employee> newEmployees) {
     validateFields(id, "Id cannot be null.");
     validateFields(newEmployees, "List of employees cannot be null.");

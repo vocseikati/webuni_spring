@@ -15,8 +15,8 @@ public interface HolidayMapper {
   @Mapping(source = "employee.id", target = "employeeId")
   HolidayDto holidayToDto(Holiday holidayRequest);
 
-//  @Mapping(target = "employee.id", ignore = true)
-  @Mapping(source = "employeeId", target = "employee.id")
+  @Mapping(target = "employee.id", ignore = true)
+//  @Mapping(source = "employeeId", target = "employee.id")
   Holiday dtoToHolidayRequest(HolidayDto holidayDto);
 
   List<Holiday> dtosToHolidays(List<HolidayDto> holidayDtos);
