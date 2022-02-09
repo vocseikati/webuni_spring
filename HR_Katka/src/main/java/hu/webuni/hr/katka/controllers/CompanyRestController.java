@@ -38,7 +38,7 @@ public class CompanyRestController {
 
   @GetMapping
   public List<CompanyDto> listAllCompanies(@RequestParam(required = false) Boolean full) {
-//    List<Company> companies = companyService.findAll();
+//    List<Company> companies = companyService.findAllHoliday();
     List<Company> companies = companyService.findAll(full);
     return mapCompanies(full, companies);
   }

@@ -7,11 +7,15 @@ import hu.webuni.hr.katka.entities.Holiday;
 import hu.webuni.hr.katka.exceptions.NotFoundException;
 import hu.webuni.hr.katka.repositories.EmployeeRepository;
 import hu.webuni.hr.katka.repositories.HolidayRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 public class DefaultHolidayService implements HolidayService {
@@ -24,7 +28,7 @@ public class DefaultHolidayService implements HolidayService {
 
   @Override
   public List<Holiday> getAllHolidays() {
-    return holidayRepository.findAll();
+    return holidayRepository.findAllHoliday();
   }
 
   @Override
@@ -43,8 +47,8 @@ public class DefaultHolidayService implements HolidayService {
 
   @Override
   @Transactional
-  public Holiday approveHoliday(Long id) {
-    Holiday holiday = getHolidayOrThrow(id);
+  public Holiday approveHoliday(Long holidayId, Boolean status) {
+    Holiday holiday = getHolidayOrThrow(holidayId);
     isApproved(holiday);
     holiday.setApproved(true);
     return holidayRepository.save(holiday);
@@ -93,11 +97,42 @@ public class DefaultHolidayService implements HolidayService {
     return employeeById.get();
   }
 
-  private Holiday getHolidayOrThrow(long id) {
+  private Holiday getHolidayOrThrow(Long id) {
     Optional<Holiday> byId = holidayRepository.findById(id);
     if (byId.isEmpty()) {
       throw new NotFoundException("There is no holiday request with the provided id.");
     }
     return byId.get();
   }
+
+  public List<Holiday> findHolidaysByExample(Holiday example) {
+    LocalDateTime createDateTimeStart = example.getCreatedAt();
+    String employeeName = example.getEmployee().getName();
+    Boolean approved = example.getApproved();
+    LocalDate startOfHolidayRequest = example.getStartDate();
+    LocalDate endOfHolidayRequest = example.getEndDate();
+
+    Specification<Holiday> spec = Specification.where(null);
+
+    if (approved != null) {
+      spec = spec.and(HolidaySpecification.hasApproved(approved));
+    }
+//    if (createDateTimeStart != null) {
+//      spec = spec.and(
+//          HolidaySpecification.createDateIsBetween(createDateTimeStart, createDateTimeEnd));
+//    }
+    if (StringUtils.hasText(employeeName)) {
+      spec = spec.and(HolidaySpecification.hasEmployeeName(employeeName));
+    }
+
+    if (startOfHolidayRequest != null) {
+      spec = spec.and(HolidaySpecification.isEndDateGreaterThan(startOfHolidayRequest));
+    }
+    if (endOfHolidayRequest != null) {
+      spec = spec.and(HolidaySpecification.isStartDateLessThan(endOfHolidayRequest));
+    }
+    return holidayRepository.findAll(spec);
+  }
+
+
 }

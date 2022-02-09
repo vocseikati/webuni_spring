@@ -61,8 +61,8 @@ public class HolidayRestController {
   }
 
   @PutMapping("/approve/{id}")
-  public HolidayDto approveHolidayRequest(@PathVariable Long id) { //todo
-    Holiday holiday = holidayService.approveHoliday(id);
+  public HolidayDto approveHolidayRequest(@PathVariable Long id, @RequestParam Boolean status) {
+    Holiday holiday = holidayService.approveHoliday(id, status);
     return holidayMapper.holidayToDto(holiday);
   }
 
