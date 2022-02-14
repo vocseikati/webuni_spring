@@ -33,7 +33,7 @@ public class SalaryService {
   }
 
   @Transactional
-  public void raiseMinSalary(long companyId, String positionName, int minSalary) {
+  public void raiseMinSalary(Long companyId, String positionName, int minSalary) {
 //		positionRepository.findByName(positionName)
 //		.forEach(p ->{
 //			p.setMinSalary(minSalary);

@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 public class HolidayDto {
 
-  private long id;
+  private Long id;
   @NotNull(message = "Start date must have a value.")
   private LocalDate startDate;
   @NotNull(message = "Start date must have a value.")
@@ -25,11 +25,11 @@ public class HolidayDto {
   public HolidayDto() {
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -49,14 +49,6 @@ public class HolidayDto {
     this.endDate = endDate;
   }
 
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(LocalDateTime createdAt) {
-    this.createdAt = createdAt;
-  }
-
   public Boolean getApproved() {
     return approved;
   }
@@ -65,19 +57,20 @@ public class HolidayDto {
     this.approved = approved;
   }
 
-  public long getEmployeeId() {
+  public Long getEmployeeId() {
     return employeeId;
   }
 
-  public void setEmployeeId(long employeeId) {
+  public void setEmployeeId(Long employeeId) {
     this.employeeId = employeeId;
   }
 
-//  public long getBossId() {
-//    return bossId;
-//  }
-//
-//  public void setBossId(long bossId) {
-//    this.bossId = bossId;
-//  }
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(LocalDateTime createdAt) {
+    this.createdAt = createdAt;
+  }
+
 }

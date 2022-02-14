@@ -25,7 +25,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
   @Query("select e.position.name as position, avg(e.salary) as averageSalary " +
       "from Company c inner join c.employeesOfCompany e " +
       "where c.id = :companyId group by e.position.name order by avg(e.salary) DESC")
-  List<AverageSalaryByPosition> findAverageSalariesByPosition(long companyId);
+  List<AverageSalaryByPosition> findAverageSalariesByPosition(Long companyId);
 
 //  @Query("SELECT DISTINCT c FROM Company c LEFT JOIN FETCH c.employeesOfCompany")
   @EntityGraph("Company.full")

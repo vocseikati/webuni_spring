@@ -11,7 +11,7 @@ public class PositionDetailsByCompany {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private Long id;
   private int minSalary;
 
   @ManyToOne
@@ -20,11 +20,11 @@ public class PositionDetailsByCompany {
   @ManyToOne
   private Position position;
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

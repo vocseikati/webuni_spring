@@ -32,7 +32,7 @@ public class DefaultHolidayService implements HolidayService {
   }
 
   @Override
-  public Holiday getHolidayById(long id) {
+  public Holiday getHolidayById(Long id) {
     return getHolidayOrThrow(id);
   }
 

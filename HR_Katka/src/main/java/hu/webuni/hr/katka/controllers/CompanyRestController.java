@@ -112,7 +112,7 @@ public class CompanyRestController {
   }
 
   @GetMapping("/{id}/salaryStats")
-  public List<AverageSalaryByPosition> getSalaryStatsById(@PathVariable long id) {
+  public List<AverageSalaryByPosition> getSalaryStatsById(@PathVariable Long id) {
     return companyService.getSalaryStats(id);
   }
 

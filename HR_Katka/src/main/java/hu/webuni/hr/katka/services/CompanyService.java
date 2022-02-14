@@ -85,7 +85,7 @@ public class CompanyService {
   public Company modifyCompany(Company company) {
     validateFields(company, "Company cannot be null.");
     validateFields(company.getId(), "Company Id cannot be null.");
-    getCompanyOrThrow(company.getId());
+    getCompanyOrThrow(company.getId(), true);
 
     return companyRepository.save(company);
   }
@@ -94,7 +94,7 @@ public class CompanyService {
   public Company addNewEmployeeToCompany(Long id, Employee newEmployee) {
     validateFields(id, "Id cannot be null.");
     validateFields(newEmployee, "Employee cannot be null.");
-    Company company = getCompanyOrThrow(id);
+    Company company = getCompanyOrThrow(id, true);
 
     setPosition(newEmployee);
 
@@ -117,10 +117,11 @@ public class CompanyService {
     employee.setPosition(position);
   }
 
+  @Transactional
   public Company deleteEmployeeFromCompany(Long id, Long employeeId) {
     validateFields(id, "Company Id cannot be null.");
     validateFields(employeeId, "Employee Id cannot be null.");
-    Company company = getCompanyOrThrow(id);
+    Company company = getCompanyOrThrow(id, false);
     Employee employeeToRemove = getEmployeeOrThrow(employeeId);
 
     List<Employee> employeeList = company.getEmployeesOfCompany();
@@ -130,20 +131,21 @@ public class CompanyService {
     }
     employeeToRemove.setCompany(null);
     employeeList.remove(employeeToRemove);
-    employeeRepository.save(employeeToRemove); // HA TRANSACTIONAL AKKOR EZ TÖRÖLHETŐ
+//    employeeRepository.save(employeeToRemove); // HA TRANSACTIONAL AKKOR EZ TÖRÖLHETŐ
     return company;
   }
 
   @Transactional
-  public Company modifyAllEmployeesFromCompany(Long id, List<Employee> newEmployees) {
+  public Company modifyAllEmployeesFromCompany(Long id, List<Employee> employees) {
     validateFields(id, "Id cannot be null.");
-    validateFields(newEmployees, "List of employees cannot be null.");
-    Company company = getCompanyOrThrow(id);
+    validateFields(employees, "List of employees cannot be null.");
+    Company company = getCompanyOrThrow(id, true);
     company.getEmployeesOfCompany().forEach(e -> e.setCompany(null));
     company.getEmployeesOfCompany().clear();
-    for (Employee employee : newEmployees) {
-      company.addEmployee(employee);
+    for (Employee employee : employees) {
+      setPosition(employee);
       employeeRepository.save(employee);
+      company.addEmployee(employee);
     }
     return company;
   }

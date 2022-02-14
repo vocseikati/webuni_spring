@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface PositionDetailsByCompanyRepository extends
     JpaRepository<PositionDetailsByCompany, Long> {
 
-  List<PositionDetailsByCompany> findByPositionNameAndCompanyId(String positionName, long companyId);
+  List<PositionDetailsByCompany> findByPositionNameAndCompanyId(String positionName, Long companyId);
 
   @Modifying
   //nem működik!
@@ -25,6 +25,6 @@ public interface PositionDetailsByCompanyRepository extends
       + "WHERE e2.position.name = :position "
       + "AND e2.company.id=:companyId "
       + "AND e2.salary < :minSalary)")
-  int updateSalaries(long companyId, String position, int minSalary);
+  int updateSalaries(Long companyId, String position, int minSalary);
 
 }

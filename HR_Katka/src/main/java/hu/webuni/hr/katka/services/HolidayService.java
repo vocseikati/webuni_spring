@@ -7,7 +7,7 @@ public interface HolidayService {
 
   List<Holiday> getAllHolidays();
 
-  Holiday getHolidayById(long id);
+  Holiday getHolidayById(Long id);
 
   Holiday addHolidayRequest(Holiday request, Long employeeId);
 

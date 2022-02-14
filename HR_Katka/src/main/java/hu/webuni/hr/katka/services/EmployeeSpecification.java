@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class EmployeeSpecification {
 
-  public static Specification<Employee> hasId(long id) {
+  public static Specification<Employee> hasId(Long id) {
     return (root, cq, cb) -> cb.equal(root.get(Employee_.id), id);
   }
 

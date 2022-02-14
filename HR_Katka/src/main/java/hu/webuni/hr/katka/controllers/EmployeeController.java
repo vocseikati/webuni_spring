@@ -42,7 +42,7 @@ public class EmployeeController {
   public String addEmployee(EmployeeDto employee) {
     try {
       checkFields(employee);
-      employee.setId((long) employees.size() + 1);
+      employee.setId((long) (employees.size() + 1));
       employee.setEntryDate(LocalDateTime.now());
       employees.add(employee);
     } catch (IllegalArgumentException ex) {
