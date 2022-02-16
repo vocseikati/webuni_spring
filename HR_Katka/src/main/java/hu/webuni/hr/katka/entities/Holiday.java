@@ -19,13 +19,13 @@ public class Holiday {
   private LocalDate endDate;
   private Boolean approved;
   private LocalDateTime createdAt;
-//  private LocalDateTime approvedAt;
+  private LocalDateTime approvedAt;
 
   @ManyToOne
   private Employee employee;
 
-//  @ManyToOne
-//  private Employee boss;
+  @ManyToOne
+  private Employee boss;
 
   public Holiday() {
   }
@@ -54,15 +54,6 @@ public class Holiday {
     this.endDate = endDate;
   }
 
-  public LocalDateTime getCreatedAt() {
-    return createdAt;
-  }
-
-  @PrePersist
-  public void setCreatedAt() {
-    this.createdAt = LocalDateTime.now();
-  }
-
   public Boolean getApproved() {
     return approved;
   }
@@ -71,13 +62,17 @@ public class Holiday {
     this.approved = approved;
   }
 
-//  public LocalDateTime getApprovedAt() {
-//    return approvedAt;
-//  }
-//
-//  public void setApprovedAt(LocalDateTime approvedAt) {
-//    this.approvedAt = approvedAt;
-//  }
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
+  }
+
+  public LocalDateTime getApprovedAt() {
+    return approvedAt;
+  }
+
+  public void setApprovedAt(LocalDateTime approvedAt) {
+    this.approvedAt = approvedAt;
+  }
 
   public Employee getEmployee() {
     return employee;
@@ -87,11 +82,18 @@ public class Holiday {
     this.employee = employee;
   }
 
-//  public Employee getBoss() {
-//    return boss;
-//  }
-//
-//  public void setBoss(Employee boss) {
-//    this.boss = boss;
-//  }
+  public Employee getBoss() {
+    return boss;
+  }
+
+  public void setBoss(Employee boss) {
+    this.boss = boss;
+  }
+
+  @PrePersist
+  public void setCreatedAt() {
+    this.createdAt = LocalDateTime.now();
+  }
+
+
 }

@@ -74,6 +74,10 @@ public class InitDBService {
     testEmployee5.setPosition(position3);
     testEmployee6.setPosition(position2);
 
+    testEmployee1.setBoss(testEmployee2);
+    testEmployee2.setBoss(testEmployee3);
+    
+
     testCompany1.addEmployee(testEmployee1);
     testCompany2.addEmployee(testEmployee2);
     testCompany2.addEmployee(testEmployee3);

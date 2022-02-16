@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,6 +32,9 @@ public class Employee {
 
   @OneToMany(mappedBy = "employee")
   private List<Holiday> holidayRequests;
+
+  @ManyToOne
+  private Employee boss;
 
   public Employee() {
   }
@@ -107,5 +108,13 @@ public class Employee {
 
     this.holidayRequests.add(holidayRequest);
     holidayRequest.setEmployee(this);
+  }
+
+  public Employee getBoss() {
+    return boss;
+  }
+
+  public void setBoss(Employee boss) {
+    this.boss = boss;
   }
 }

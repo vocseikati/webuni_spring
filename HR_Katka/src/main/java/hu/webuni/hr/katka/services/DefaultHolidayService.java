@@ -26,9 +26,13 @@ public class DefaultHolidayService implements HolidayService {
   @Autowired
   EmployeeRepository employeeRepository;
 
+  @Autowired
+  EmployeeService employeeService;
+
   @Override
   public List<Holiday> getAllHolidays() {
-    return holidayRepository.findAllHoliday();
+//    return holidayRepository.findAllHoliday();
+    return holidayRepository.findAll();
   }
 
   @Override
@@ -47,11 +51,19 @@ public class DefaultHolidayService implements HolidayService {
 
   @Override
   @Transactional
-  public Holiday approveHoliday(Long holidayId, Boolean status) {
+  public Holiday approveHoliday(Long holidayId, Long bossId, Boolean status) {
     Holiday holiday = getHolidayOrThrow(holidayId);
     isApproved(holiday);
-    holiday.setApproved(true);
-    return holidayRepository.save(holiday);
+    Employee employee = holiday.getEmployee();
+    employee.setBoss(employeeService.findById(bossId)); //teszteléshez
+    Employee boss = employee.getBoss();
+    if (boss == null || !employee.getBoss().getId().equals(bossId)){
+      throw new IllegalArgumentException("Boss id invalid.");
+    }
+    holiday.setBoss(employeeService.findById(bossId));
+    holiday.setApproved(status);
+    holiday.setApprovedAt(LocalDateTime.now());
+    return holiday;
   }
 
   @Override
@@ -73,6 +85,7 @@ public class DefaultHolidayService implements HolidayService {
     isApproved(holidayById);
     holidayById.getEmployee().getHolidayRequests()
         .remove(holidayById); //LazyInitializationException
+    holidayRepository.deleteById(id);
   }
 
   @Override

@@ -10,13 +10,15 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface HolidayMapper {
 
-  List<HolidayDto> holidaysToDtos(List<Holiday> holiday);
+  List<HolidayDto> holidaysToDtos(List<Holiday> holidays);
 
   @Mapping(source = "employee.id", target = "employeeId")
+  @Mapping(source = "boss.id", target = "bossId")
   HolidayDto holidayToDto(Holiday holidayRequest);
 
-  @Mapping(target = "employee.id", ignore = true)
-//  @Mapping(source = "employeeId", target = "employee.id")
+//  @Mapping(target = "employee.id", ignore = true)
+  @Mapping(target = "employee", ignore = true)
+  @Mapping(target = "boss", ignore = true)
   Holiday dtoToHolidayRequest(HolidayDto holidayDto);
 
   List<Holiday> dtosToHolidays(List<HolidayDto> holidayDtos);

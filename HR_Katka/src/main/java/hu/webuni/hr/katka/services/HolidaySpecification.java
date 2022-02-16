@@ -25,6 +25,12 @@ public class HolidaySpecification {
             (employeeName + "%").toLowerCase());
   }
 
+  public static Specification<Holiday> hasBossName(String bossName) {
+    return (root, cq, cb) -> cb.like(cb.lower(root.get(Holiday_.boss).get(Employee_.name)),
+        (bossName + "%").toLowerCase());
+  }
+
+
   public static Specification<Holiday> isStartDateLessThan(LocalDate startOfHolidayRequest) {
     return (root, cq, cb) -> cb
         .lessThan(root.get(Holiday_.startDate), startOfHolidayRequest);

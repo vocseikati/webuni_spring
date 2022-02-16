@@ -13,11 +13,11 @@ public class HolidayDto {
   @NotNull(message = "Start date must have a value.")
   private LocalDate endDate;
   private Boolean approved;
+  private LocalDateTime approvedAt;
 
   @NotNull(message = "Employee id must have a value.")
   private Long employeeId;
-//  @NotNull(message = "Boss id must have a value.")
-//  private Long bossId;
+  private Long bossId;
 
   @JsonProperty(access = JsonProperty.Access.READ_ONLY)
   private LocalDateTime createdAt = LocalDateTime.now();
@@ -73,4 +73,19 @@ public class HolidayDto {
     this.createdAt = createdAt;
   }
 
+  public LocalDateTime getApprovedAt() {
+    return approvedAt;
+  }
+
+  public void setApprovedAt(LocalDateTime approvedAt) {
+    this.approvedAt = approvedAt;
+  }
+
+  public Long getBossId() {
+    return bossId;
+  }
+
+  public void setBossId(Long bossId) {
+    this.bossId = bossId;
+  }
 }

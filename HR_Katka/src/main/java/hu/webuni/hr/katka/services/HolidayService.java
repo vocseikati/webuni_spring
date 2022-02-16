@@ -11,7 +11,7 @@ public interface HolidayService {
 
   Holiday addHolidayRequest(Holiday request, Long employeeId);
 
-  Holiday approveHoliday(Long id, Boolean status);
+  Holiday approveHoliday(Long id, Long bossId, Boolean status);
 
   Holiday modifyHoliday(Holiday holiday, Long employeeId);
 

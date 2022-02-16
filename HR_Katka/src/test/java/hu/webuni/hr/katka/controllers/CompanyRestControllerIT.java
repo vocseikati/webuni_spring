@@ -53,7 +53,7 @@ class CompanyRestControllerIT {
   public void save_EmployeeToCompany_WorksCorrectly() {
     List<CompanyDto> companies = getAllCompanies();
 
-    CompanyDto company = companies.get(0);
+    CompanyDto company = getCompanyById(3L);
 
     List<EmployeeDto> employeesBefore = company.getEmployeesOfCompany();
 
@@ -105,6 +105,19 @@ class CompanyRestControllerIT {
         .getResponseBody();
     Objects.requireNonNull(responseList).sort(Comparator.comparing(CompanyDto::getId));
     return responseList;
+  }
+
+  private CompanyDto getCompanyById(Long id) {
+    CompanyDto responseBody = webTestClient
+        .get()
+        .uri(BASE_URI + "/" + id)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody(CompanyDto.class)
+        .returnResult()
+        .getResponseBody();
+    return responseBody;
   }
 
   private ResponseSpec saveCompany(CompanyDto newCompany) {

@@ -60,9 +60,10 @@ public class HolidayRestController {
     holidayService.deleteHolidayRequest(id);
   }
 
-  @PutMapping("/approve/{id}")
-  public HolidayDto approveHolidayRequest(@PathVariable Long id, @RequestParam Boolean status) {
-    Holiday holiday = holidayService.approveHoliday(id, status);
+  @PutMapping(value = "/approve/{id}", params = {"status", "bossId"})
+  public HolidayDto approveHolidayRequest(@PathVariable Long id, @RequestParam Long bossId,
+                                          @RequestParam Boolean status) {
+    Holiday holiday = holidayService.approveHoliday(id, bossId, status);
     return holidayMapper.holidayToDto(holiday);
   }
 
